@@ -1,5 +1,8 @@
 .DS_Store
 *.swp
 node_modules/
+__pycache__/
+*.pyc
 
 docs/design.md
+docs/superpowers/
