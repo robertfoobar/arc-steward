@@ -1,5 +1,8 @@
 # arc-steward
 
+[![CI](https://github.com/robertfoobar/arc-steward/actions/workflows/ci.yml/badge.svg)](https://github.com/robertfoobar/arc-steward/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 An [Agent Skill](https://agentskills.io) that keeps a fixed canon of architecture
 documentation artifacts up to date **after every feature**, rolled up into a complete
 [arc42](https://arc42.org) or [Software Guidebook](https://leanpub.com/software-architecture-for-developers)
