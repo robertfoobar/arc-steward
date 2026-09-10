@@ -18,8 +18,7 @@
 python3 -m unittest discover -s tests -v
 ```
 
-If you changed `SKILL.md`, `conventions.md`, or anything under `scripts/` or `templates/`, also
-run the security scan:
+Also run the security scan. CI fails on any finding the baseline doesn't cover:
 
 ```bash
 skillspector scan . --no-llm --baseline .skillspector-baseline.yaml
@@ -28,6 +27,12 @@ skillspector scan . --no-llm --baseline .skillspector-baseline.yaml
 A new finding that's a genuine false positive (inherent to how this skill works, not a real
 issue) gets added to `.skillspector-baseline.yaml` with a specific reason — not a blanket
 "reviewed" note. A finding that isn't a false positive gets fixed instead.
+
+Baseline entries are fingerprints of the flagged text, so editing a passage that carries a
+baselined finding (the install commands in `README.md`, the top of `SKILL.md`, the marker
+section of `conventions.md`) makes the same finding reappear as new. Regenerate with
+`skillspector baseline . --no-llm -o .skillspector-baseline.yaml` and carry the existing reasons
+over — only if rule and file still match one to one.
 
 ## Code style
 

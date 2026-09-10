@@ -24,4 +24,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v3
       - run: uv tool install git+https://github.com/NVIDIA/skillspector.git@v2.11.2
-      - run: skillspector scan . --no-llm --baseline .skillspector-baseline.yaml
+      - name: Scan and fail on any unsuppressed finding
+        run: |
+          report="$RUNNER_TEMP/skillspector.json"
+          status=0
+          skillspector scan . --no-llm --baseline .skillspector-baseline.yaml --format json --output "$report" || status=$?
+          jq -r '.issues[] | "\(.severity) \(.id) \(.location.file):\(.location.start_line) \(.pattern)"' "$report"
+          jq -e '.issues | length == 0' "$report" > /dev/null && exit "$status"
