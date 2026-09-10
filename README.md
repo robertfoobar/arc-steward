@@ -93,7 +93,7 @@ skills directory:
 git clone https://github.com/robertfoobar/arc-steward.git
 git -C arc-steward checkout "$(git -C arc-steward describe --tags --abbrev=0)"
 mkdir -p ~/.agents/skills
-ln -sf "$PWD/arc-steward" ~/.agents/skills/arc-steward
+ln -sfn "$PWD/arc-steward" ~/.agents/skills/arc-steward
 ```
 
 The second line checks out the latest release; `main` is the development branch. Git's
@@ -108,7 +108,7 @@ Verified so far:
 | Codex CLI | Yes | None |
 | GitHub Copilot CLI | Yes | None |
 | Gemini CLI | Yes | None |
-| Claude Code | No | `mkdir -p ~/.claude/skills && ln -sf "$PWD/arc-steward" ~/.claude/skills/arc-steward` |
+| Claude Code | No | `mkdir -p ~/.claude/skills && ln -sfn "$PWD/arc-steward" ~/.claude/skills/arc-steward` |
 
 Other harnesses (Cursor, Antigravity, Pi, ...) haven't been checked — if `~/.agents/skills/`
 doesn't get picked up, look for that harness's own skills directory convention.
