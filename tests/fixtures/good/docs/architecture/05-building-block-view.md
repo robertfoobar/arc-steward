@@ -2,7 +2,7 @@
 
 Hand-written introduction that the refresh must never touch.
 
-<!-- arc42:generated:components -->
+<!-- arc-steward:generated:components -->
 ```mermaid
 flowchart TD
   subgraph Backend
@@ -11,9 +11,9 @@ flowchart TD
   Client[Client] --> HTTP
 ```
 
-<!-- arc42:refs
+<!-- arc-steward:refs
 backend/src/adapters
 -->
-<!-- /arc42:generated -->
+<!-- /arc-steward:generated -->
 
 Hand-written outro. The persisted state is described in [the users data model](08-data-model/users.md#users).

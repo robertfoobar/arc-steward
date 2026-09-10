@@ -3,7 +3,7 @@ import re
 from checks.finding import Finding
 
 CHECK = "routing"
-ROUTING_FILENAME = "arc42.routing.md"
+ROUTING_FILENAME = "arc-steward.routing.md"
 DEFAULT_STANDARD = "arc42"
 DEFAULT_LANGUAGE = "en"
 ALL_DOCUMENTS = "all"
@@ -54,6 +54,7 @@ _TOKEN_RE = re.compile(r"^`?([a-z0-9_-]+)`?$")
 _LIST_ITEM_RE = re.compile(r"^\s*[-*]\s+(.*)$")
 _LEADING_CHAPTER_RE = re.compile(r"^`?(\d{2})\b")
 _CHAPTER_RE = re.compile(r"\b(\d{2})\b")
+_PLACEHOLDER_RE = re.compile(r"\bEXAMPLE\b")
 
 
 def _sections(lines):
@@ -127,13 +128,26 @@ def routing_path(docs_dir):
     return docs_dir / ROUTING_FILENAME
 
 
+def _placeholder_findings(lines):
+    return [
+        Finding(
+            ROUTING_FILENAME,
+            number,
+            CHECK,
+            "template placeholder left in place, replace it with this repository's own value",
+        )
+        for number, line in enumerate(lines, start=1)
+        if _PLACEHOLDER_RE.search(line)
+    ]
+
+
 def check_routing(docs_dir):
     path = routing_path(docs_dir)
     if not path.is_file():
         return []
-    text = path.read_text(encoding="utf-8", errors="replace")
-    sections = _sections(text.splitlines())
-    findings = []
+    lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
+    sections = _sections(lines)
+    findings = _placeholder_findings(lines)
 
     standard_line, standard = _first_token(sections.get("documentation standard"))
     if standard is None:

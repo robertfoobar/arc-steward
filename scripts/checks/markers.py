@@ -3,8 +3,8 @@ import re
 from checks.finding import Finding
 
 CHECK = "markers"
-OPEN_RE = re.compile(r"^<!--\s*arc42:generated:(\S+)\s*-->\s*$")
-CLOSE_RE = re.compile(r"^<!--\s*/arc42:generated\s*-->\s*$")
+OPEN_RE = re.compile(r"^<!--\s*arc-steward:generated:(\S+)\s*-->\s*$")
+CLOSE_RE = re.compile(r"^<!--\s*/arc-steward:generated\s*-->\s*$")
 ID_RE = re.compile(r"^[a-z0-9-]+$")
 
 

@@ -11,9 +11,9 @@ CLEAN = """# Chapter
 
 Hand-written intro.
 
-<!-- arc42:generated:context-diagram -->
+<!-- arc-steward:generated:context-diagram -->
 Generated body.
-<!-- /arc42:generated -->
+<!-- /arc-steward:generated -->
 
 Hand-written outro.
 """
@@ -24,7 +24,7 @@ class CheckMarkersTest(unittest.TestCase):
         self.assertEqual(markers.check_markers(CLEAN, "03.md"), [])
 
     def test_unclosed_block_is_reported(self):
-        text = "<!-- arc42:generated:abc -->\nbody\n"
+        text = "<!-- arc-steward:generated:abc -->\nbody\n"
         found = markers.check_markers(text, "03.md")
         self.assertEqual(len(found), 1)
         self.assertEqual(found[0].line, 1)
@@ -32,33 +32,33 @@ class CheckMarkersTest(unittest.TestCase):
         self.assertEqual(found[0].check, "markers")
 
     def test_closing_without_opening_is_reported(self):
-        text = "body\n<!-- /arc42:generated -->\n"
+        text = "body\n<!-- /arc-steward:generated -->\n"
         found = markers.check_markers(text, "03.md")
         self.assertEqual(len(found), 1)
         self.assertEqual(found[0].line, 2)
 
     def test_nested_block_is_reported(self):
         text = (
-            "<!-- arc42:generated:outer -->\n"
-            "<!-- arc42:generated:inner -->\n"
-            "<!-- /arc42:generated -->\n"
-            "<!-- /arc42:generated -->\n"
+            "<!-- arc-steward:generated:outer -->\n"
+            "<!-- arc-steward:generated:inner -->\n"
+            "<!-- /arc-steward:generated -->\n"
+            "<!-- /arc-steward:generated -->\n"
         )
         found = markers.check_markers(text, "03.md")
         self.assertTrue(any("nested" in f.message.lower() for f in found))
 
     def test_duplicate_id_in_same_file_is_reported(self):
         text = (
-            "<!-- arc42:generated:dup -->\n"
-            "<!-- /arc42:generated -->\n"
-            "<!-- arc42:generated:dup -->\n"
-            "<!-- /arc42:generated -->\n"
+            "<!-- arc-steward:generated:dup -->\n"
+            "<!-- /arc-steward:generated -->\n"
+            "<!-- arc-steward:generated:dup -->\n"
+            "<!-- /arc-steward:generated -->\n"
         )
         found = markers.check_markers(text, "03.md")
         self.assertTrue(any("dup" in f.message for f in found))
 
     def test_invalid_id_is_reported(self):
-        text = "<!-- arc42:generated:Not_Valid -->\n<!-- /arc42:generated -->\n"
+        text = "<!-- arc-steward:generated:Not_Valid -->\n<!-- /arc-steward:generated -->\n"
         found = markers.check_markers(text, "03.md")
         self.assertEqual(len(found), 1)
 
