@@ -7,10 +7,11 @@ hook — it runs when the agent is asked to, typically as a step of the developm
 <!-- arc-steward:generated:functions -->
 | Function | Trigger | What happens |
 |---|---|---|
+| Format check | Every invocation, before mode selection | Compares the routing file's format version with the one this skill supports; any mismatch stops the run and nothing is written |
 | Mode selection | Every invocation | `docs/architecture/arc-steward.routing.md` missing means bootstrap, otherwise refresh; an explicit mode in the request wins |
 | Bootstrap | First run in a repository | Gathers the routing values and settles standard and document selection with the human, writes the routing file once everything is confirmed, then `index.md` and every selected chapter; resumes an interrupted run and stops on foreign content in `docs/architecture/` |
 | Refresh | Feature complete, before the pull request | Diffs the branch against the default branch, maps changed paths through the routing table, patches only the affected generated blocks |
-| Verification | End of every bootstrap and refresh | Runs `scripts/verify.py`; the run is not finished until it exits 0 |
+| Verification | End of every bootstrap and refresh | Runs `scripts/verify.py`; the run is not finished until it exits 0, and a format mismatch stops it with that single finding |
 
 Generated content lives only inside provenance markers, and every statement the code does not
 support becomes a `⚠️ TODO(human)` instead of a guess — see

@@ -11,7 +11,7 @@ directory — the only deployable unit.
 <!-- arc-steward:generated:components -->
 ```mermaid
 flowchart TD
-  subgraph SkillDir["arc-steward skill directory, installed by git clone and symlink"]
+  subgraph SkillDir["arc-steward skill directory, a release checkout installed by symlink"]
     subgraph Instructions["Agent instructions, loaded into the agent context"]
       Skill["SKILL.md: mode selection and procedures"]
       Conventions["conventions.md: canons, markers, diagram rules"]
@@ -37,7 +37,7 @@ flowchart TD
   Verify -->|per document| Mermaid
   Verify -->|per document| References
   Verify -->|per document| Links
-  Verify -->|once per documentation set| Routing
+  Verify -->|format version first, then once per documentation set| Routing
   Mermaid -->|extracts mermaid fences via| Fences
   References -->|extracts mermaid fences via| Fences
   Routing -.->|mirrors the chapter tables of| Conventions
@@ -66,17 +66,20 @@ scripts/checks/fences.py
 | `mermaid` | Every document | A mermaid fence is unterminated or empty, has an unknown diagram type, unbalanced brackets, or a `subgraph` without `end` |
 | `references` | Every document | A path in a reference annotation does not exist, or — when schema globs are given — an `erDiagram` entity is missing from the schema sources |
 | `links` | Every document | A relative link target or an anchor does not resolve |
-| `routing` | The documentation set | The standard or language is unknown, a selected chapter has no file, the path routing table targets a chapter the set does not contain, or a template placeholder marked `EXAMPLE` is left in the routing file |
+| `routing` | The documentation set | Checked first: the format version is unparseable or differs from the supported one — that finding alone is reported and nothing else runs. Then: the standard or language is unknown or carries more than its value, a section heading appears twice, a selected chapter has no file, the path routing table targets a chapter the set does not contain, or a template placeholder marked `EXAMPLE` is left in the routing file |
 
 `scripts/verify.py` exits 0 when clean, 1 on findings or when it scanned zero documents, and 2 on
 a wrong invocation. The exact command is in [Verification](../../SKILL.md#verification).
 `routing.py` carries its own copy of the chapter tables from `conventions.md`;
-`tests/test_canon_sync.py` fails when the two copies disagree.
+`tests/test_canon_sync.py` fails when the two copies disagree, and
+`tests/test_format_version.py` when the supported format version differs between code,
+`conventions.md`, the template and this repository's own routing file.
 
 <!-- arc-steward:refs
 scripts/verify.py
 scripts/checks
 tests/test_canon_sync.py
+tests/test_format_version.py
 -->
 <!-- /arc-steward:generated -->
 
@@ -133,7 +136,10 @@ sequenceDiagram
   participant Docs as Chapter files
   participant Verify as scripts/verify.py
   Developer->>Agent: Feature complete, refresh the docs before the pull request
-  Agent->>Routing: read standard, documents and path routing
+  Agent->>Routing: read format version, standard, documents and path routing
+  alt format version differs from the supported one
+    Agent-->>Developer: report both versions and stop, write nothing
+  end
   Agent->>Git: probe origin/HEAD, then origin/main, origin/master, main, master
   alt no default branch found
     Agent-->>Developer: ask which branch to compare against

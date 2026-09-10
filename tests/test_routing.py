@@ -47,6 +47,31 @@ class RoutingTest(unittest.TestCase):
     def test_absent_routing_file_is_not_a_finding(self):
         self.assertEqual(routing.check_routing(self.docs), [])
 
+    def test_standard_with_trailing_text_is_a_finding_not_arc42(self):
+        self.write_documents(ARC42_ALL)
+        self.write_routing("## Documentation standard\n\n`guidebook` (Simon Brown)\n")
+        messages = self.messages()
+        self.assertEqual(len(messages), 1)
+        self.assertIn("single value", messages[0])
+        self.assertIn("documentation standard", messages[0])
+
+    def test_language_with_trailing_text_is_a_finding(self):
+        self.write_documents(ARC42_ALL)
+        self.write_routing("## Documentation language\n\n`de` (German)\n")
+        self.assertTrue(any("single value" in m for m in self.messages()))
+
+    def test_prose_after_the_standard_value_is_allowed(self):
+        self.write_documents(ARC42_ALL)
+        self.write_routing(
+            "## Documentation standard\n\n`arc42`\n\nWhich chapter canon this set follows.\n"
+        )
+        self.assertEqual(self.messages(), [])
+
+    def test_duplicated_section_is_a_finding(self):
+        self.write_documents(ARC42_ALL)
+        self.write_routing("## Documents\n\n`all`\n\n## Documents\n\n- `01` — Intro\n")
+        self.assertTrue(any("appears more than once" in m for m in self.messages()))
+
     def test_template_placeholder_left_in_place_is_a_finding(self):
         self.write_documents(ARC42_ALL)
         self.write_routing(

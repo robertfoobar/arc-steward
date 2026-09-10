@@ -15,6 +15,7 @@ that it cannot drift from them.
 | Chapter file names come from the fixed canon tables, never from ad-hoc translation | [Chapter names](../../conventions.md#1-chapter-names) |
 | CI runs the unit tests, including a verification of this documentation set, and a SkillSpector scan on every push to `main` and every pull request; the scan fails on any finding the reviewed baseline does not cover | [`ci.yml`](../../.github/workflows/ci.yml), [`test_own_docs.py`](../../tests/test_own_docs.py), [`.skillspector-baseline.yaml`](../../.skillspector-baseline.yaml) |
 | The skill is MIT-licensed; the arc42 and Guidebook structures it follows keep their own licenses | [`LICENSE`](../../LICENSE), [`NOTICE`](../../NOTICE) |
+| Releases are SemVer tags; the major version tracks the persisted format, whose version is recorded in the routing file, and `docs/architecture/arc-steward.routing.md` never moves | [Versioning](../../CONTRIBUTING.md#versioning), [Format version](../../conventions.md#7-format-version), [`CHANGELOG.md`](../../CHANGELOG.md) |
 | Semantic, issue-scoped commits, squash-merged pull requests, no inline code comments | [`CONTRIBUTING.md`](../../CONTRIBUTING.md) |
 | Read and write scope that security reports are measured against | [`SECURITY.md`](../../SECURITY.md) |
 
@@ -28,6 +29,7 @@ tests/test_own_docs.py
 LICENSE
 NOTICE
 CONTRIBUTING.md
+CHANGELOG.md
 SECURITY.md
 -->
 <!-- /arc-steward:generated -->

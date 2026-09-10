@@ -2,6 +2,14 @@
 
 Read by the `arc-steward` skill. Edit this file, not the skill.
 
+## Format version
+
+`1`
+
+Which version of arc-steward's persisted format this set follows: the directory, this file, the
+markers and the chapter file names. A newer arc-steward reads it to recognize a set written by an
+older one. Do not change it by hand, a migration does.
+
 ## Documentation standard
 
 `guidebook`
@@ -70,4 +78,4 @@ prose, so chapters 05 and 14 have nothing to route to.
 | `tests/**` | 03 quality-attributes, 04 constraints, 06 checks |
 | `README.md` | 01 context, 03 quality-attributes, 04 constraints |
 | `.github/workflows/**`, `.skillspector-baseline.yaml` | 04 constraints |
-| `LICENSE`, `NOTICE`, `CONTRIBUTING.md`, `SECURITY.md` | 04 constraints |
+| `LICENSE`, `NOTICE`, `CONTRIBUTING.md`, `SECURITY.md`, `CHANGELOG.md` | 04 constraints |

@@ -51,3 +51,31 @@ name clearer or put the reasoning in `conventions.md`, the commit message, or th
 `conventions.md` is the source of truth for the arc42/Software Guidebook chapter canons, marker
 syntax, and everything else the skill enforces. Changing behavior usually means updating
 `conventions.md` and the corresponding check under `scripts/checks/` together, with a test.
+
+## Versioning
+
+Releases are tagged `vMAJOR.MINOR.PATCH`. The public contract is what the skill persists in a
+user's repository — the documentation directory, the routing file and its sections, the marker
+syntax, the chapter file names, the data-model layout (`conventions.md` §7) — plus the
+`verify.py` arguments and exit codes. Output wording is not part of it.
+
+- **MAJOR**: an existing documentation set has to be migrated, or the `verify.py` arguments or
+  exit codes change incompatibly. Every format-version bump is a major release; it bumps
+  `FORMAT_VERSION` in `scripts/checks/routing.py`, `conventions.md` §7, the template and this
+  repo's own routing file together (a test enforces that they agree), and ships migration notes —
+  with a migration script where practical.
+- **MINOR**: new capability. A new check that can report findings on existing sets is minor,
+  and the release notes say so.
+- **PATCH**: fixes that change neither the format nor the checks.
+
+The routing file path `docs/architecture/arc-steward.routing.md` never changes — it is how a newer
+skill finds a set written by an older one.
+
+## Releasing
+
+1. Move the `[Unreleased]` entries in `CHANGELOG.md` under a new `## [X.Y.Z] - YYYY-MM-DD`
+   heading, update the link references at the bottom, and merge that through a PR.
+2. Tag the resulting `main` commit — only `main`, only with green CI:
+   `git tag -a vX.Y.Z -m vX.Y.Z && git push origin vX.Y.Z`.
+3. Publish the release with that section as notes:
+   `gh release create vX.Y.Z --verify-tag --title vX.Y.Z --notes-file <file with the section>`.
