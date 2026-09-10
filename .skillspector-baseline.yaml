@@ -1,0 +1,39 @@
+# SkillSpector baseline — findings listed here are suppressed on future scans.
+# Edit 'reason' fields and add glob 'rules' as needed. See docs/SUPPRESSION.md.
+version: 2
+scanner_version: 2.11.1
+rules: []
+fingerprints:
+- hash: sha256:f7b131d1f9530271fbe81a8e40afa873e6374b6da8da4683e42faf69698ec2e5
+  rule_id: P2
+  file: conventions.md
+  reason: >-
+    Documents the skill's own <!-- arc42:generated:id --> HTML-comment marker convention.
+    It is data markup read by scripts/checks/markers.py, not an instruction directed at an
+    agent.
+- hash: sha256:d118342ab802f7b6e710d5c654b35c0864e9a468b79e7f7a65f137fc9276031b
+  rule_id: RA2
+  file: README.md
+  reason: >-
+    User-run installation command (git clone + symlink into ~/.agents/skills) shown in the
+    README for the human installing the skill, not persistence an agent establishes on its
+    own during a session.
+- hash: sha256:5188e5a5fb778fd6698e608df214c7d8e463a71a69608ada4ae9c114ac569392
+  rule_id: AS3
+  file: README.md
+  reason: >-
+    Table cell naming the ~/.claude/skills path as an install target. The skill contains no
+    code that lists, reads, or otherwise enumerates other skills' directories or files.
+- hash: sha256:ecdf1a294c86220aca2d68a242bab4d7d9948e8b848b9bc0c5c30a2bd0fbcc8f
+  rule_id: RA2
+  file: README.md
+  reason: >-
+    Same installation-table cell as the AS3 finding above: a user-run symlink command in the
+    README, not agent-established runtime persistence.
+- hash: sha256:c9a015110d7077f6d7d4a4ca4bbbf850dd9de509184637b63a00a154dcb723e5
+  rule_id: RA2
+  file: SKILL.md
+  reason: >-
+    Flags the skill's declared tool scope next to its documented purpose of writing
+    docs/arc42/ files across runs — the skill's core, git-tracked, user-visible function,
+    not covert persistence.

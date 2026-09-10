@@ -123,6 +123,5 @@ git -C arc-steward pull
 
 ## License
 
-[MIT](LICENSE) for the skill. The arc42 template itself is by Dr. Gernot Starke and
-Dr. Peter Hruschka, licensed CC BY-SA 4.0. The Software Guidebook structure is by Simon Brown,
-from *Software Architecture for Developers*.
+[MIT](LICENSE) for the skill. See [NOTICE](NOTICE) for the licenses covering the documentation
+standards its output follows (arc42, the Software Guidebook).
