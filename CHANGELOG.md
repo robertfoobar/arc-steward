@@ -2,7 +2,8 @@
 
 All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow
-[Semantic Versioning](https://semver.org/) as defined in [CONTRIBUTING.md](CONTRIBUTING.md#versioning).
+[Semantic Versioning](https://semver.org/) as defined in
+[RELEASING.md](RELEASING.md#choosing-the-version).
 
 ## [Unreleased]
 

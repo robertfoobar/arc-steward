@@ -78,4 +78,4 @@ prose, so chapters 05 and 14 have nothing to route to.
 | `tests/**` | 03 quality-attributes, 04 constraints, 06 checks |
 | `README.md` | 01 context, 03 quality-attributes, 04 constraints |
 | `.github/workflows/**`, `.skillspector-baseline.yaml` | 04 constraints |
-| `LICENSE`, `NOTICE`, `CONTRIBUTING.md`, `SECURITY.md`, `CHANGELOG.md` | 04 constraints |
+| `LICENSE`, `NOTICE`, `CONTRIBUTING.md`, `SECURITY.md`, `CHANGELOG.md`, `RELEASING.md` | 04 constraints |

@@ -10,7 +10,8 @@
    `chore`.
 4. Open a PR against `main`. PRs are squash-merged, so intermediate commits don't need to be
    clean, but the PR title becomes the final commit subject — keep it accurate. Reference the
-   issue with `Closes #<nr>` in the PR description.
+   issue with `Closes #<nr>` in the PR description, and add a changelog entry — see
+   [Versioning and the changelog](#versioning-and-the-changelog).
 
 ## Before opening a PR
 
@@ -52,22 +53,26 @@ name clearer or put the reasoning in `conventions.md`, the commit message, or th
 syntax, and everything else the skill enforces. Changing behavior usually means updating
 `conventions.md` and the corresponding check under `scripts/checks/` together, with a test.
 
-## Versioning
+## Versioning and the changelog
 
-Releases are tagged `vMAJOR.MINOR.PATCH`. The public contract is what the skill persists in a
-user's repository — the documentation directory, the routing file and its sections, the marker
-syntax, the chapter file names, the data-model layout (`conventions.md` §7) — plus the
-`verify.py` arguments and exit codes. Output wording is not part of it.
+Releases are tagged `vMAJOR.MINOR.PATCH` by the maintainer, see [RELEASING.md](RELEASING.md). What
+matters when you contribute is whether your change touches the public contract: what the skill
+persists in a user's repository — the documentation directory, the routing file and its
+sections, the marker syntax, the chapter file names, the data-model layout (`conventions.md` §7)
+— plus the `verify.py` arguments and exit codes. Output wording is not part of it.
 
-- **MAJOR**: an existing documentation set has to be migrated, or the `verify.py` arguments or
-  exit codes change incompatibly. The two go together in both directions: a change that requires
-  a migration raises the format version, and every format-version bump is a major release. It bumps
-  `FORMAT_VERSION` in `scripts/checks/routing.py`, `conventions.md` §7, the template and this
-  repo's own routing file together (a test enforces that they agree), and ships migration notes —
-  with a migration script where practical.
-- **MINOR**: new capability. A new check that can report findings on existing sets is minor,
-  and the release notes say so.
-- **PATCH**: fixes that change neither the format nor the checks.
+Every PR that changes behavior adds an entry under `## [Unreleased]` in `CHANGELOG.md`, in the
+matching [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) group (`Added`, `Changed`,
+`Fixed`, `Removed`). Say so in that entry and in the PR description when the change is one of
+these:
+
+- **Breaking**: an existing documentation set has to be migrated, or the `verify.py` arguments or
+  exit codes change incompatibly. A change that requires a migration is always a format change:
+  raise `FORMAT_VERSION` in `scripts/checks/routing.py`, `conventions.md` §7, the template and
+  this repo's own routing file together (a test enforces that they agree), and put the migration
+  notes into the changelog entry — with a migration script where practical.
+- **New findings**: a new or stricter check that can report findings on sets that passed before.
+  Not breaking, but users need to hear about it before they update.
 
 The routing file path `docs/architecture/arc-steward.routing.md` never changes — it is how a newer
 skill finds a set written by an older one.
@@ -77,13 +82,3 @@ that its markers, reference annotations, routing file and chapter names are all 
 A change that breaks one of those tests is a format change: raise the format version, add a
 fixture for the new version, and turn the old fixture's tests into a check that it is reported
 as older. Never edit a frozen fixture to make it pass.
-
-## Releasing
-
-1. Move the `[Unreleased]` entries in `CHANGELOG.md` under a new `## [X.Y.Z] - YYYY-MM-DD`
-   heading, update the link references at the bottom, and merge that through a PR.
-2. Right after that merge, tag the merge commit on `main` — never a local branch commit, and
-   only with green CI. Until the first tag exists the install command in the README fails:
-   `git fetch origin && git tag -a vX.Y.Z -m vX.Y.Z origin/main && git push origin vX.Y.Z`.
-3. Publish the release with that section as notes:
-   `gh release create vX.Y.Z --verify-tag --title vX.Y.Z --notes-file <file with the section>`.
