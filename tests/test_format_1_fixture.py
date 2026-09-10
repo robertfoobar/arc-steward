@@ -1,5 +1,6 @@
 import contextlib
 import io
+import json
 import pathlib
 import shutil
 import sys
@@ -60,6 +61,11 @@ class FormatOneFixtureTest(unittest.TestCase):
         code, output = self.run_verify()
         self.assertEqual(code, 1)
         self.assertIn("format version 2", output)
+
+    def test_every_format_1_chapter_name_is_unchanged(self):
+        frozen = json.loads((FIXTURE / "chapter-names.json").read_text(encoding="utf-8"))
+        current = {"arc42": routing.ARC42_CHAPTERS, "guidebook": routing.GUIDEBOOK_CHAPTERS}
+        self.assertEqual(current, frozen)
 
     def test_its_chapter_file_names_are_still_the_canon(self):
         (self.docs / "01-context.md").rename(self.docs / "01-kontext-renamed.md")

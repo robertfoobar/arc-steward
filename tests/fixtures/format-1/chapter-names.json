@@ -1,0 +1,110 @@
+{
+  "arc42": {
+    "01": {
+      "de": "01-einfuehrung-und-ziele.md",
+      "en": "01-introduction-and-goals.md"
+    },
+    "02": {
+      "de": "02-randbedingungen.md",
+      "en": "02-constraints.md"
+    },
+    "03": {
+      "de": "03-kontextabgrenzung.md",
+      "en": "03-context-and-scope.md"
+    },
+    "04": {
+      "de": "04-loesungsstrategie.md",
+      "en": "04-solution-strategy.md"
+    },
+    "05": {
+      "de": "05-bausteinsicht.md",
+      "en": "05-building-block-view.md"
+    },
+    "06": {
+      "de": "06-laufzeitsicht.md",
+      "en": "06-runtime-view.md"
+    },
+    "07": {
+      "de": "07-verteilungssicht.md",
+      "en": "07-deployment-view.md"
+    },
+    "08": {
+      "de": "08-querschnittliche-konzepte.md",
+      "en": "08-crosscutting-concepts.md"
+    },
+    "09": {
+      "de": "09-architekturentscheidungen.md",
+      "en": "09-architecture-decisions.md"
+    },
+    "10": {
+      "de": "10-qualitaetsanforderungen.md",
+      "en": "10-quality-requirements.md"
+    },
+    "11": {
+      "de": "11-risiken-und-technische-schulden.md",
+      "en": "11-risks-and-technical-debt.md"
+    },
+    "12": {
+      "de": "12-glossar.md",
+      "en": "12-glossary.md"
+    }
+  },
+  "guidebook": {
+    "01": {
+      "de": "01-kontext.md",
+      "en": "01-context.md"
+    },
+    "02": {
+      "de": "02-funktionaler-ueberblick.md",
+      "en": "02-functional-overview.md"
+    },
+    "03": {
+      "de": "03-qualitaetsmerkmale.md",
+      "en": "03-quality-attributes.md"
+    },
+    "04": {
+      "de": "04-randbedingungen.md",
+      "en": "04-constraints.md"
+    },
+    "05": {
+      "de": "05-prinzipien.md",
+      "en": "05-principles.md"
+    },
+    "06": {
+      "de": "06-softwarearchitektur.md",
+      "en": "06-software-architecture.md"
+    },
+    "07": {
+      "de": "07-externe-schnittstellen.md",
+      "en": "07-external-interfaces.md"
+    },
+    "08": {
+      "de": "08-code.md",
+      "en": "08-code.md"
+    },
+    "09": {
+      "de": "09-daten.md",
+      "en": "09-data.md"
+    },
+    "10": {
+      "de": "10-infrastrukturarchitektur.md",
+      "en": "10-infrastructure-architecture.md"
+    },
+    "11": {
+      "de": "11-deployment.md",
+      "en": "11-deployment.md"
+    },
+    "12": {
+      "de": "12-betrieb-und-support.md",
+      "en": "12-operation-and-support.md"
+    },
+    "13": {
+      "de": "13-entwicklungsumgebung.md",
+      "en": "13-development-environment.md"
+    },
+    "14": {
+      "de": "14-entscheidungslog.md",
+      "en": "14-decision-log.md"
+    }
+  }
+}
