@@ -27,7 +27,8 @@ marker syntax and one diagram convention per artifact.
 
 1. Check where the set stands before touching anything:
    - `docs/architecture/arc-steward.routing.md` exists: an earlier run already finished steps 1
-     and 2. Continue with step 3, creating only the files that are missing.
+     and 2. Continue with step 3, creating only the files that are missing; steps 4 and 5 then
+     apply to those files only, never to chapters that already exist.
    - `docs/architecture/` exists and is not empty (any file or subdirectory) but has no routing
      file: its content was not created by this skill. Stop and ask the human to either move that
      content elsewhere or abort. Do not write into the directory alongside it — the
@@ -45,12 +46,12 @@ marker syntax and one diagram convention per artifact.
    expensive to change afterwards. Propose `arc42` and `all` unless the repository argues
    otherwise, and have the human confirm. Deviating from `all` needs a reason from the
    repository, not a preference for less work — see `conventions.md` §1.4. Only once everything
-   from step 1 and 2 is confirmed, create `docs/architecture/`, copy
-   `templates/arc-steward.routing.template.md` to `docs/architecture/arc-steward.routing.md` and
-   fill in all seven sections with the agreed values, replacing every placeholder marked
-   `EXAMPLE` — the harness fails on any that remain. The routing file is written last on
-   purpose: its presence switches the next run to refresh, so a session that ends while a
-   question is still open must leave no routing file behind.
+   from step 1 and 2 is confirmed, create `docs/architecture/` and write
+   `docs/architecture/arc-steward.routing.md` in a single write: the structure of
+   `templates/arc-steward.routing.template.md` with all seven sections already holding the agreed
+   values and no placeholder marked `EXAMPLE` left — the harness fails on any that remain. The
+   routing file is written last and whole on purpose: its presence switches the next run to
+   refresh, so no session may end with a routing file that holds unconfirmed values.
 3. Create `docs/architecture/index.md` (entry point and chapter overview) plus every selected
    chapter, using the names from the conventions table for the configured standard and language.
    If the selection is a subset, say in `index.md` which chapters are deliberately absent and

@@ -59,6 +59,15 @@ class RoutingTest(unittest.TestCase):
         self.assertEqual([f.line for f in findings], [9])
         self.assertIn("template placeholder", findings[0].message)
 
+    def test_placeholder_is_reported_even_when_the_standard_is_unknown(self):
+        self.write_routing(
+            "## Documentation standard\n\n`bogus`\n\n"
+            "## Bounded contexts\n\n- `users` — EXAMPLE, replace\n"
+        )
+        messages = self.messages()
+        self.assertTrue(any("template placeholder" in m for m in messages))
+        self.assertTrue(any("unknown documentation standard" in m for m in messages))
+
     def test_unedited_template_fails_on_every_placeholder(self):
         self.write_documents(ARC42_ALL)
         template = TEMPLATES / ROUTING_TEMPLATE
