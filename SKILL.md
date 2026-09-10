@@ -7,8 +7,10 @@ allowed-tools: Read Write Edit Bash(git:*) Bash(python3:*)
 # arc-steward
 
 Keeps a fixed canon of architecture documentation current. Two modes, selected automatically:
-`docs/arc42/index.md` missing means **bootstrap**, otherwise **refresh**. An explicit mode in the
-request overrides the detection.
+`docs/architecture/arc-steward.routing.md` missing means **bootstrap**, otherwise **refresh**. The
+routing file decides, not `index.md`: `docs/architecture/` is a common directory name and may
+already hold an unrelated `index.md`, while only this skill creates the routing file. An explicit
+mode in the request overrides the detection.
 
 The documentation set is described by two values in the routing file, both read before anything
 is written:
@@ -23,28 +25,37 @@ marker syntax and one diagram convention per artifact.
 
 ## Bootstrap
 
-1. Read `docs/arc42/arc42.routing.md`. If absent, create `docs/arc42/` and copy
-   `templates/arc42.routing.template.md` to `docs/arc42/arc42.routing.md`, then fill in **all
-   seven** of its sections from the repository: detect the documentation language from existing
-   docs and propose it for confirmation, detect schema sources, propose bounded contexts, and
-   derive the path routing table from the repository's actual layout. Every example value in the
-   template is a placeholder from a hypothetical project — replace all of them, do not edit
-   around them. Ask the human to confirm the essential business flows — never invent that list.
-   Leaving the path routing table unfilled, or leaving it matching the template's example paths,
-   makes every later refresh find nothing and silently no-op, so it is not optional. As a sanity
-   check on the finished table, confirm every path pattern in it matches at least one path in
-   `git ls-files` — a pattern matching nothing is a wrong entry, not a placeholder for the future.
+1. Check where the set stands before touching anything:
+   - `docs/architecture/arc-steward.routing.md` exists: an earlier run already finished steps 1
+     and 2. Continue with step 3, creating only the files that are missing; steps 4 and 5 then
+     apply to those files only, never to chapters that already exist.
+   - `docs/architecture/` exists and is not empty (any file or subdirectory) but has no routing
+     file: its content was not created by this skill. Stop and ask the human to either move that
+     content elsewhere or abort. Do not write into the directory alongside it — the
+     verification harness scans everything under it and would report findings in files this
+     skill must not touch.
+   - Otherwise gather the routing values from the repository, without writing anything yet:
+     detect the documentation language from existing docs and propose it for confirmation,
+     detect schema sources, propose bounded contexts, and derive the path routing table from the
+     repository's actual layout. Ask the human to confirm the essential business flows — never
+     invent that list. An empty path routing table makes every later refresh find nothing and
+     silently no-op, so it is not optional. Confirm every path pattern in it matches at least
+     one path in `git ls-files` — a pattern matching nothing is a wrong entry, not a placeholder
+     for the future.
 2. Settle the standard and the document selection before writing any chapter, because both are
    expensive to change afterwards. Propose `arc42` and `all` unless the repository argues
    otherwise, and have the human confirm. Deviating from `all` needs a reason from the
-   repository, not a preference for less work — see `conventions.md` §1.4. Whatever is agreed
-   goes into the routing file's **Documentation standard** and **Documents** sections; the
-   harness reads them back, so an unrecorded choice is a broken one.
-3. Create `docs/arc42/index.md` (entry point and chapter overview) plus every selected chapter,
-   using the names from the conventions table for the configured standard and language. Without
-   `index.md` the next invocation would detect "missing" again and re-run bootstrap instead of
-   switching to refresh. If the selection is a subset, say in `index.md` which chapters are
-   deliberately absent and why, so a reader can tell "not applicable" from "not written".
+   repository, not a preference for less work — see `conventions.md` §1.4. Only once everything
+   from step 1 and 2 is confirmed, create `docs/architecture/` and write
+   `docs/architecture/arc-steward.routing.md` in a single write: the structure of
+   `templates/arc-steward.routing.template.md` with all seven sections already holding the agreed
+   values and no placeholder marked `EXAMPLE` left — the harness fails on any that remain. The
+   routing file is written last and whole on purpose: its presence switches the next run to
+   refresh, so no session may end with a routing file that holds unconfirmed values.
+3. Create `docs/architecture/index.md` (entry point and chapter overview) plus every selected
+   chapter, using the names from the conventions table for the configured standard and language.
+   If the selection is a subset, say in `index.md` which chapters are deliberately absent and
+   why, so a reader can tell "not applicable" from "not written".
 4. Generate what the code supports. Everything else gets `⚠️ TODO(human): <specific question>`.
 5. Run the verification command below. Fix findings. Do not finish with findings outstanding.
 6. Report the standard and selection used, which chapters are generated, which are stubs, and
@@ -52,10 +63,12 @@ marker syntax and one diagram convention per artifact.
 
 ## Refresh
 
-1. Read `docs/arc42/arc42.routing.md`, including the documentation standard and the document
-   selection — the routing table names artifacts by chapter number, and that number only
-   resolves to a file through the canon in `conventions.md` §1. If the file does not exist, run
-   bootstrap steps 1 and 2 first to create and fill it in, then continue here.
+1. Read `docs/architecture/arc-steward.routing.md`, including the documentation standard and the
+   document selection — the routing table names artifacts by chapter number, and that number
+   only resolves to a file through the canon in `conventions.md` §1. If the file does not exist
+   (only possible when refresh was requested explicitly), run bootstrap steps 1 and 2 first to
+   create and fill it in, then continue here. If `index.md` or any selected chapter is missing,
+   the last bootstrap did not finish: complete bootstrap steps 3 to 6 first, then continue here.
 2. Determine the feature diff, without hard-coding a default branch name or remote. Probe
    for a comparison point rather than assuming one — `refs/remotes/origin/HEAD` is frequently
    unset (a single-branch clone, a shallow CI checkout, a remote added without
@@ -78,8 +91,8 @@ marker syntax and one diagram convention per artifact.
    against — never guess a ref or silently diff against nothing.
 3. Map the changed paths through the routing table to the affected artifacts. If nothing maps,
    report that and stop — no change is a valid outcome, not a failure.
-4. For each affected artifact, edit only inside its `<!-- arc42:generated:id -->` block. Never
-   touch a line outside a marked block.
+4. For each affected artifact, edit only inside its `<!-- arc-steward:generated:id -->` block.
+   Never touch a line outside a marked block.
 5. If the set has a glossary chapter, any new domain entity gets an entry there.
 6. Run the verification command below. Fix findings.
 7. Report what changed, and what was deliberately left alone and why.
@@ -93,7 +106,7 @@ sources. `<skill-dir>` is the directory this SKILL.md was loaded from — e.g.
 install:
 
 ```bash
-python3 <skill-dir>/scripts/verify.py docs/arc42 \
+python3 <skill-dir>/scripts/verify.py docs/architecture \
   --repo-root . \
   --schema-glob 'backend/src/db/migrations/*.sql'
 ```
@@ -109,6 +122,7 @@ directory argument if that happens.
 The routing check is what makes a subset selection safe: it fails the run when a selected chapter
 has no file, and when the path routing table targets a chapter the set does not contain. Without
 it that second case is invisible, because refresh would simply map nothing and report success.
+It also fails on every line of the routing file still marked `EXAMPLE` from the template.
 
 Exit code 0 means clean. Exit code 1 lists findings as `file:line: [check] message`, or reports
 zero documents scanned. Exit code 2 means the invocation was wrong — usually a mistyped

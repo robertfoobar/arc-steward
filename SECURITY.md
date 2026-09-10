@@ -12,9 +12,10 @@ channel to be set up, without including exploit details.
 
 ## Scope
 
-This skill reads files in the repository it runs against and writes documentation files under
-`docs/arc42/` (or the configured equivalent) within the fenced `<!-- arc42:generated:id -->`
-blocks. `scripts/verify.py` reads files under the given docs directory and any paths matched by
+This skill reads files in the repository it runs against and writes only under
+`docs/architecture/`: bootstrap creates the routing file, `index.md` and the chapter files there,
+and refresh edits only inside `<!-- arc-steward:generated:id -->` blocks of those files.
+`scripts/verify.py` reads files under the given docs directory and any paths matched by
 `--schema-glob`. Relevant reports include anything that would make the skill read, write, or
 execute outside of what `SKILL.md` and `conventions.md` describe.
 

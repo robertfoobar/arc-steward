@@ -4,8 +4,9 @@ Read by the `arc-steward` skill. Edit this file, not the skill.
 
 > Every example value below — the schema glob, the bounded contexts, the business flow, and the
 > four path-routing rows — is illustrative only, drawn from a hypothetical Python/SQL backend.
-> Replace all of them with values specific to this repository. Leaving one in place produces a
-> routing table that matches nothing in a different stack, and nothing else will catch that.
+> Replace all of them with values specific to this repository. The verification harness fails on
+> every line that still carries the placeholder marker, because a leftover example produces a
+> routing table that matches nothing in a different stack.
 
 ## Documentation standard
 

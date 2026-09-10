@@ -12,7 +12,7 @@ FIXTURES = pathlib.Path(__file__).resolve().parent / "fixtures"
 
 
 def run(root, extra=None):
-    argv = [str(root / "docs" / "arc42"), "--repo-root", str(root)] + (extra or [])
+    argv = [str(root / "docs" / "architecture"), "--repo-root", str(root)] + (extra or [])
     out = io.StringIO()
     with contextlib.redirect_stdout(out):
         code = verify.main(argv)

@@ -108,9 +108,9 @@ and say so where a reader would look for it.
 Generated content lives inside a fenced block:
 
 ```
-<!-- arc42:generated:<block-id> -->
+<!-- arc-steward:generated:<block-id> -->
 ...generated content...
-<!-- /arc42:generated -->
+<!-- /arc-steward:generated -->
 ```
 
 The checker (`scripts/checks/markers.py`) enforces four rules:
@@ -134,13 +134,13 @@ Directly below a generated diagram, inside the same generated block, list every 
 path the diagram depicts:
 
 ```
-<!-- arc42:refs
+<!-- arc-steward:refs
 path/to/file/one
 path/to/file/two
 -->
 ```
 
-The opening line is exactly `<!-- arc42:refs` with nothing after it on that line, one path per
+The opening line is exactly `<!-- arc-steward:refs` with nothing after it on that line, one path per
 line, and a closing line containing only `-->`. The checker
 (`scripts/checks/references.py`) confirms every listed path exists in the repo. When the
 diagram is an `erDiagram`, the checker additionally resolves every entity name it finds against

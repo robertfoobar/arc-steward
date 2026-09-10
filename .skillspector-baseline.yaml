@@ -4,36 +4,36 @@ version: 2
 scanner_version: 2.11.2
 rules: []
 fingerprints:
-- hash: sha256:cc6d67a346a5eeb06cb16a25fe9016e3a7956de345b12e3eb4de0ba019d9fff4
+- hash: sha256:ab32f9a93fe3e61b010ab5f13d0d5d09d91a1b3e5aec1fe1da1e9ada97bc2797
   rule_id: P2
   file: conventions.md
   reason: >-
-    Documents the skill's own <!-- arc42:generated:id --> HTML-comment marker convention.
-    It is data markup read by scripts/checks/markers.py, not an instruction directed at an
-    agent.
-- hash: sha256:44a629b9f5f9e84f6f1a4ea00048b7870db0b6f82a4beb8e1ede3729d52ce108
+    Documents the skill's own <!-- arc-steward:generated:id --> HTML-comment marker
+    convention. It is data markup read by scripts/checks/markers.py, not an instruction
+    directed at an agent.
+- hash: sha256:c2d27c1bbda1d539b6cbf1eb9162fe73c450a8b6f12c57a61b26e2a6f09cfffe
   rule_id: RA2
   file: README.md
   reason: >-
     User-run installation command (git clone + symlink into ~/.agents/skills) shown in the
     README for the human installing the skill, not persistence an agent establishes on its
     own during a session.
-- hash: sha256:4ea846b20542c08ca6a3d40d3a3711fb1d80f109397b6030aebe451f5c0ad546
+- hash: sha256:0c38fec79c39ead116e0614415dc2d22d3170facf4b921d8a750efd4b4456458
   rule_id: AS3
   file: README.md
   reason: >-
     Table cell naming the ~/.claude/skills path as an install target. The skill contains no
     code that lists, reads, or otherwise enumerates other skills' directories or files.
-- hash: sha256:eaa8b176cda0c029639fb4d4fca0da91ad89a6974e2846dadb4ad4f8bea50687
+- hash: sha256:16c825de16818dcb65ae9acd6a32f48ee857a8b292423d5db02efdc3cb520ec1
   rule_id: RA2
   file: README.md
   reason: >-
     Same installation-table cell as the AS3 finding above: a user-run symlink command in the
     README, not agent-established runtime persistence.
-- hash: sha256:b5fa2c9921b0825d0dc1c88e2971ee9086d7dd946c8044330a2825ac8ccc2264
+- hash: sha256:60301112f92551e16463286acd4932d9c176592d9596e7a390e4e3af0d29f459
   rule_id: RA2
   file: SKILL.md
   reason: >-
     Flags the skill's declared tool scope next to its documented purpose of writing
-    docs/arc42/ files across runs — the skill's core, git-tracked, user-visible function,
-    not covert persistence.
+    docs/architecture/ files across runs — the skill's core, git-tracked, user-visible
+    function, not covert persistence.

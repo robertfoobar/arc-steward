@@ -12,10 +12,10 @@ class LinksTest(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.root = pathlib.Path(self.tmp.name)
-        arc42 = self.root / "docs" / "arc42"
-        arc42.mkdir(parents=True)
-        self.doc = arc42 / "05-building-block-view.md"
-        (arc42 / "03-context-and-scope.md").write_text(
+        docs_dir = self.root / "docs" / "architecture"
+        docs_dir.mkdir(parents=True)
+        self.doc = docs_dir / "05-building-block-view.md"
+        (docs_dir / "03-context-and-scope.md").write_text(
             "# Context and Scope\n\n## External Interfaces\n\ntext\n"
         )
         (self.root / "docs" / "adr").mkdir()
