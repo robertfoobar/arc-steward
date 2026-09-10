@@ -27,11 +27,11 @@ class ReferencesTestCase(unittest.TestCase):
 
 class PathAnnotationTest(ReferencesTestCase):
     def test_existing_path_is_clean(self):
-        text = "<!-- arc42:refs\nbackend/src/collectors\n-->\n"
+        text = "<!-- arc-steward:refs\nbackend/src/collectors\n-->\n"
         self.assertEqual(references.check_references(text, "05.md", self.root, []), [])
 
     def test_missing_path_is_reported(self):
-        text = "<!-- arc42:refs\nbackend/src/ghosts\n-->\n"
+        text = "<!-- arc-steward:refs\nbackend/src/ghosts\n-->\n"
         found = references.check_references(text, "05.md", self.root, [])
         self.assertEqual(len(found), 1)
         self.assertEqual(found[0].check, "references")

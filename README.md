@@ -67,7 +67,7 @@ chapter by chapter.
 - **Mermaid only.** GitHub renders it natively, so every diagram is readable in the PR diff
   where the review happens. No render step, and no shipping your schema to a public
   PlantUML or Kroki server.
-- **Provenance markers.** Generated content lives inside `<!-- arc42:generated:id -->`
+- **Provenance markers.** Generated content lives inside `<!-- arc-steward:generated:id -->`
   fences. The refresh touches nothing outside them, so your prose is structurally safe —
   not merely protected by a polite prompt.
 - **Evidence or a gap.** Where the code does not support a statement, the skill writes an

@@ -1,6 +1,6 @@
 # Users
 
-<!-- arc42:generated:users-erd -->
+<!-- arc-steward:generated:users-erd -->
 ```mermaid
 erDiagram
   users {
@@ -13,4 +13,4 @@ erDiagram
   }
   users ||--o{ user_sessions : "has"
 ```
-<!-- /arc42:generated -->
+<!-- /arc-steward:generated -->

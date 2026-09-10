@@ -1,13 +1,13 @@
 # Building Block View
 
-<!-- arc42:generated:components -->
+<!-- arc-steward:generated:components -->
 ```mermaid
 flowchart TD
   subgraph Backend
     HTTP[HTTP Adapter
 ```
 
-<!-- arc42:refs
+<!-- arc-steward:refs
 backend/src/does-not-exist
 -->
 

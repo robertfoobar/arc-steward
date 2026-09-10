@@ -3,7 +3,7 @@ import re
 from checks.finding import Finding
 
 CHECK = "routing"
-ROUTING_FILENAME = "arc42.routing.md"
+ROUTING_FILENAME = "arc-steward.routing.md"
 DEFAULT_STANDARD = "arc42"
 DEFAULT_LANGUAGE = "en"
 ALL_DOCUMENTS = "all"

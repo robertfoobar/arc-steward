@@ -4,7 +4,7 @@ from checks import fences
 from checks.finding import Finding
 
 CHECK = "references"
-REFS_OPEN_RE = re.compile(r"^<!--\s*arc42:refs\s*$")
+REFS_OPEN_RE = re.compile(r"^<!--\s*arc-steward:refs\s*$")
 REFS_CLOSE_RE = re.compile(r"^\s*-->\s*$")
 ENTITY_BLOCK_RE = re.compile(r"^\s*([A-Za-z_][A-Za-z0-9_]*)\s*\{\s*$")
 ENTITY_REL_RE = re.compile(
