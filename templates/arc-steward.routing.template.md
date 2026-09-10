@@ -13,7 +13,7 @@ Read by the `arc-steward` skill. Edit this file, not the skill.
 `1`
 
 Which version of arc-steward's persisted format this set follows: the directory, this file, the
-markers and the chapter file names. A newer arc-steward reads it to recognize a set written by an
+markers, the chapter file names and the data-model layout. A newer arc-steward reads it to recognize a set written by an
 older one. Do not change it by hand, a migration does.
 
 ## Documentation standard

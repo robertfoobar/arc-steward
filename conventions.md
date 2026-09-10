@@ -236,4 +236,5 @@ the migration described in the release notes, a newer one needs a newer skill.
 
 One path is fixed across all format versions: `docs/architecture/arc-steward.routing.md`. It is
 how a newer skill finds a set written by an older one, so no format change may move or rename
-it. Everything else may change with a format bump, and every format bump is a major release.
+it. Everything else may change, but only with a format bump: any change that requires migrating
+an existing set raises the format version, and every format bump is a major release.

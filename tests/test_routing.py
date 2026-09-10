@@ -48,7 +48,7 @@ class RoutingTest(unittest.TestCase):
         self.assertEqual(routing.check_routing(self.docs), [])
 
     def test_standard_with_trailing_text_is_a_finding_not_arc42(self):
-        self.write_documents(ARC42_ALL)
+        self.write_documents([names["en"] for names in routing.GUIDEBOOK_CHAPTERS.values()])
         self.write_routing("## Documentation standard\n\n`guidebook` (Simon Brown)\n")
         messages = self.messages()
         self.assertEqual(len(messages), 1)
@@ -149,6 +149,21 @@ class RoutingTest(unittest.TestCase):
         self.assertIn(
             "unknown documentation language 'fr'", " ".join(self.messages())
         )
+
+    def test_unknown_language_stops_before_expecting_filenames(self):
+        self.write_documents([names["de"] for names in routing.ARC42_CHAPTERS.values()])
+        self.write_routing("## Documentation language\n\n`fr`\n")
+        self.assertEqual(len(self.messages()), 1)
+
+    def test_unparseable_language_stops_before_expecting_filenames(self):
+        self.write_documents([names["de"] for names in routing.ARC42_CHAPTERS.values()])
+        self.write_routing("## Documentation language\n\n`de` (German)\n")
+        self.assertEqual(len(self.messages()), 1)
+
+    def test_value_with_an_unbalanced_backtick_is_a_finding(self):
+        self.write_documents(ARC42_ALL)
+        self.write_routing("## Documentation standard\n\n`arc42\n")
+        self.assertTrue(any("single value" in m for m in self.messages()))
 
     def test_guidebook_set_passes(self):
         self.write_documents(

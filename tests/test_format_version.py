@@ -14,6 +14,7 @@ import verify
 from checks import routing
 
 UNPARSEABLE = "unparseable format version"
+NEWER = routing.FORMAT_VERSION + 1
 
 
 def _section_value(path, heading):
@@ -61,10 +62,10 @@ class FormatVersionTest(unittest.TestCase):
         self.assertIsNone(self.with_version("`1`\n\nWhich version of the persisted format."))
 
     def test_newer_version_names_both_versions(self):
-        finding = self.with_version("`2`")
+        finding = self.with_version(f"`{NEWER}`")
         self.assertIn("newer", finding.message)
-        self.assertIn("format version 2", finding.message)
-        self.assertIn("supports 1", finding.message)
+        self.assertIn(f"format version {NEWER}", finding.message)
+        self.assertIn(f"supports {routing.FORMAT_VERSION}", finding.message)
         self.assertEqual(finding.line, 3)
 
     def test_older_version_points_at_the_release_notes(self):
@@ -72,6 +73,33 @@ class FormatVersionTest(unittest.TestCase):
             finding = self.with_version("`1`")
         self.assertIn("older", finding.message)
         self.assertIn("release notes", finding.message)
+        self.assertEqual(finding.line, 3)
+
+    def test_unparseable_finding_points_at_the_value_line(self):
+        self.assertEqual(self.with_version("`1.0`").line, 3)
+
+    def test_two_and_three_digit_versions_parse(self):
+        for value in ("`10`", "`99`", "`999`"):
+            finding = self.with_version(value)
+            self.assertNotIn(UNPARSEABLE, getattr(finding, "message", ""), value)
+
+    def test_closing_hashes_on_the_heading_are_read(self):
+        finding = self.check(f"## Format version ##\n\n`{NEWER}`\n")
+        self.assertIn("newer", finding.message)
+
+    def test_indented_heading_is_read(self):
+        finding = self.check(f"   ## Format version\n\n`{NEWER}`\n")
+        self.assertIn("newer", finding.message)
+
+    def test_byte_order_mark_before_the_first_heading_is_ignored(self):
+        finding = self.check(f"\ufeff## Format version\n\n`{NEWER}`\n")
+        self.assertIn("newer", finding.message)
+
+    def test_blockquote_before_the_value_is_unparseable(self):
+        self.assert_unparseable("> the current version\n\n`1`")
+
+    def test_unbalanced_backtick_is_unparseable(self):
+        self.assert_unparseable("`1")
 
     def test_zero_is_unparseable(self):
         self.assert_unparseable("`0`")
@@ -121,12 +149,12 @@ class FormatMismatchStopsVerifyTest(unittest.TestCase):
         return code, out.getvalue()
 
     def test_mismatch_reports_only_the_format_finding(self):
-        (self.docs / routing.ROUTING_FILENAME).write_text("## Format version\n\n`2`\n")
+        (self.docs / routing.ROUTING_FILENAME).write_text(f"## Format version\n\n`{NEWER}`\n")
         code, output = self.run_main()
         finding_lines = [line for line in output.splitlines() if ": [" in line]
         self.assertEqual(code, 1)
         self.assertEqual(len(finding_lines), 1)
-        self.assertIn("format version 2", finding_lines[0])
+        self.assertIn(f"format version {NEWER}", finding_lines[0])
         self.assertNotIn("05.md", output)
 
     def test_unparseable_version_also_stops(self):

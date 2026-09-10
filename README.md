@@ -132,15 +132,15 @@ git -C arc-steward fetch --tags
 git -C arc-steward checkout "$(git -C arc-steward describe --tags --abbrev=0 origin/main)"
 ```
 
-To stay on a major version, check out a specific tag such as `v1.4.2` instead.
+To stay on a major version, match its tags, for example `--match 'v1.*'` in the `describe` call.
 
 ### Versioning
 
 Releases are tagged `vMAJOR.MINOR.PATCH`, and the version number describes what the skill
 persists in your repository. A major release means an existing documentation set has to be
 migrated — its release notes explain how, with a migration script where practical. Minor and
-patch releases never require changing an existing set, though a new check may report findings,
-which the release notes announce. A set records its format version, and the skill refuses to
+patch releases never require a migration, though a new check may report findings, which the
+release notes announce. A set records its format version, and the skill refuses to
 work on one written in a different format instead of failing silently.
 
 ## License

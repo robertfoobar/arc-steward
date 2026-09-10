@@ -51,13 +51,13 @@ GUIDEBOOK_CHAPTERS = {
 STANDARDS = {"arc42": ARC42_CHAPTERS, "guidebook": GUIDEBOOK_CHAPTERS}
 LANGUAGES = ("en", "de")
 
-_HEADING_RE = re.compile(r"^##\s+(.*?)\s*$")
-_TOKEN_RE = re.compile(r"^`?([a-z0-9_-]+)`?$")
+_HEADING_RE = re.compile(r"^ {0,3}##[ \t]+(.*?)(?:[ \t]+#+)?[ \t]*$")
+_TOKEN_RE = re.compile(r"^(?:`([a-z0-9_-]+)`|([a-z0-9_-]+))$")
 _LIST_ITEM_RE = re.compile(r"^\s*[-*]\s+(.*)$")
 _LEADING_CHAPTER_RE = re.compile(r"^`?(\d{2})\b")
 _CHAPTER_RE = re.compile(r"\b(\d{2})\b")
 _PLACEHOLDER_RE = re.compile(r"\bEXAMPLE\b")
-_VERSION_RE = re.compile(r"^`?([1-9][0-9]{0,2})`?$")
+_VERSION_RE = re.compile(r"^(?:`([1-9][0-9]{0,2})`|([1-9][0-9]{0,2}))$")
 
 
 def _headings(lines):
@@ -92,18 +92,25 @@ def _repeated_headings(lines):
 def _first_value_line(section):
     for number, line in section or []:
         stripped = line.strip()
-        if stripped and not stripped.startswith(">"):
+        if stripped:
             return number, stripped
     return None, None
+
+
+def _matched_value(regex, text):
+    match = regex.match(text)
+    if not match:
+        return None
+    return match.group(1) or match.group(2)
 
 
 def _single_value(section, label):
     number, text = _first_value_line(section)
     if text is None:
         return None, None, None
-    token = _TOKEN_RE.match(text)
+    token = _matched_value(_TOKEN_RE, text)
     if token:
-        return number, token.group(1), None
+        return number, token, None
     finding = Finding(
         ROUTING_FILENAME,
         number,
@@ -173,7 +180,7 @@ def _placeholder_findings(lines):
 
 
 def _read_lines(path):
-    return path.read_text(encoding="utf-8", errors="replace").splitlines()
+    return path.read_text(encoding="utf-8", errors="replace").lstrip("\ufeff").splitlines()
 
 
 def _format_finding(line, message):
@@ -194,14 +201,14 @@ def check_format(docs_dir):
             "the format version section appears more than once, so the format version is ambiguous",
         )
     number, text = _first_value_line(_sections(lines)[FORMAT_SECTION])
-    match = _VERSION_RE.match(text) if text is not None else None
-    if not match:
+    value = _matched_value(_VERSION_RE, text) if text is not None else None
+    if value is None:
         return _format_finding(
             number or headings[0],
             f"unparseable format version {text or '(empty section)'}, expected a single positive "
             f"integer such as `{FORMAT_VERSION}`",
         )
-    version = int(match.group(1))
+    version = int(value)
     if version > FORMAT_VERSION:
         return _format_finding(
             number,
@@ -263,6 +270,7 @@ def check_routing(docs_dir):
     )
     if unparseable:
         findings.append(unparseable)
+        return findings
     if language is None:
         language = DEFAULT_LANGUAGE
     elif language not in LANGUAGES:
@@ -275,7 +283,7 @@ def check_routing(docs_dir):
                 + ", ".join(LANGUAGES),
             )
         )
-        language = DEFAULT_LANGUAGE
+        return findings
 
     chapters = STANDARDS[standard]
     selected = _document_ids(sections.get("documents"))
