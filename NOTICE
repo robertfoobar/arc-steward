@@ -1,0 +1,9 @@
+The MIT license in LICENSE covers this skill's own code (SKILL.md, conventions.md, scripts/,
+templates/, tests/).
+
+It does not cover the documentation standards this skill's output follows:
+
+- The arc42 template (chapter structure and names) is by Dr. Gernot Starke and Dr. Peter
+  Hruschka, licensed under CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/).
+- The Software Guidebook structure is by Simon Brown, from *Software Architecture for
+  Developers* (https://leanpub.com/software-architecture-for-developers).
