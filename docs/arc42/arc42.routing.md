@@ -57,7 +57,7 @@ entry point that starts it.
 Which code paths affect which artifact. A change touching a path triggers a review of every
 artifact listed against it. Each artifact begins with the two-digit chapter number, which is what
 the verification harness reads. Every path pattern below matches at least one path in
-`git ls-files`, which `tests/test_own_docs.py` enforces. Artifacts are named by chapter number
+`git ls-files`; `tests/test_own_docs.py` checks each against the files in the repository. Artifacts are named by chapter number
 and generated block id. Only generated blocks are routed — a refresh never edits hand-written
 prose, so chapters 05 and 14 have nothing to route to.
 

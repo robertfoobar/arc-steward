@@ -2,7 +2,7 @@
 
 This is the architecture documentation of arc-steward itself, following Simon Brown's
 [Software Guidebook](https://leanpub.com/software-architecture-for-developers), in English. It is
-maintained by arc-steward: before each pull request, the refresh step
+maintained by arc-steward: before each pull request, the refresh step that
 [`CONTRIBUTING.md`](../../CONTRIBUTING.md#before-opening-a-pr) asks for updates the generated
 blocks from the feature diff through [`arc42.routing.md`](arc42.routing.md). The directory is called `docs/arc42/` whatever the
 standard — see decision 9 in the [decision log](14-decision-log.md).
