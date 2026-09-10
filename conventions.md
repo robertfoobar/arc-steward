@@ -16,7 +16,8 @@ and never invent a file name that is not in these tables — always take it from
 
 > `scripts/checks/routing.py` carries a machine-readable copy of both tables so the harness can
 > verify the selection against what is on disk. Editing one without the other makes the check
-> disagree with this document; they move together.
+> disagree with this document; they move together, and `tests/test_canon_sync.py` fails when
+> they do not.
 
 ### 1.1 arc42 v9 — `arc42`
 
@@ -139,6 +140,9 @@ path/to/file/one
 path/to/file/two
 -->
 ```
+
+A generated table derived from the code carries the same annotation below it, listing the paths
+it was derived from, so a reviewer can see which paths the routing table must send to that block.
 
 The opening line is exactly `<!-- arc-steward:refs` with nothing after it on that line, one path per
 line, and a closing line containing only `-->`. The checker

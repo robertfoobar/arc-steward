@@ -18,10 +18,17 @@
 python3 -m unittest discover -s tests -v
 ```
 
+The suite includes a verification of the repository's own architecture documentation under
+`docs/architecture/`. Keep it current by running the skill in refresh mode on your branch — ask your agent
+to *"refresh the architecture documentation"* — and commit the result with the change.
+
 Also run the security scan. CI fails on any finding the baseline doesn't cover:
 
 ```bash
-skillspector scan . --no-llm --baseline .skillspector-baseline.yaml
+uv tool install git+https://github.com/NVIDIA/skillspector.git@v2.11.2
+export_dir=$(mktemp -d)
+git ls-files -co --exclude-standard | tar -cf - -T - | tar -xf - -C "$export_dir"
+(cd "$export_dir" && skillspector scan . --no-llm --baseline .skillspector-baseline.yaml)
 ```
 
 A new finding that's a genuine false positive (inherent to how this skill works, not a real
