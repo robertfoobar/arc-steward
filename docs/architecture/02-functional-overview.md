@@ -4,11 +4,11 @@ arc-steward does one job: it keeps a fixed canon of architecture documentation i
 code, at the moment a feature is about to become a pull request. It is not a CI gate and not a
 hook — it runs when the agent is asked to, typically as a step of the development workflow.
 
-<!-- arc42:generated:functions -->
+<!-- arc-steward:generated:functions -->
 | Function | Trigger | What happens |
 |---|---|---|
-| Mode selection | Every invocation | `docs/arc42/index.md` missing means bootstrap, otherwise refresh; an explicit mode in the request wins |
-| Bootstrap | First run in a repository | Creates and fills the routing file if it is missing, settles standard and document selection with the human, writes `index.md` and every selected chapter |
+| Mode selection | Every invocation | `docs/architecture/arc-steward.routing.md` missing means bootstrap, otherwise refresh; an explicit mode in the request wins |
+| Bootstrap | First run in a repository | Gathers the routing values and settles standard and document selection with the human, writes the routing file once everything is confirmed, then `index.md` and every selected chapter; resumes an interrupted run and stops on foreign content in `docs/architecture/` |
 | Refresh | Feature complete, before the pull request | Diffs the branch against the default branch, maps changed paths through the routing table, patches only the affected generated blocks |
 | Verification | End of every bootstrap and refresh | Runs `scripts/verify.py`; the run is not finished until it exits 0 |
 
@@ -17,12 +17,12 @@ support becomes a `⚠️ TODO(human)` instead of a guess — see
 [Provenance markers](../../conventions.md#2-provenance-markers) and
 [Evidence rule](../../conventions.md#5-evidence-rule).
 
-<!-- arc42:refs
+<!-- arc-steward:refs
 SKILL.md
 conventions.md
-templates/arc42.routing.template.md
+templates/arc-steward.routing.template.md
 -->
-<!-- /arc42:generated -->
+<!-- /arc-steward:generated -->
 
 The artifact canon, the two standards, the two languages and the chapter subset are described in
 the README under [The artifact canon](../../README.md#the-artifact-canon) and

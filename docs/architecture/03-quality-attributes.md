@@ -6,7 +6,7 @@ enforces mechanically. Each names the mechanism that carries it and the limit of
 ⚠️ TODO(human): Is the order below the intended priority when two attributes conflict — for
 example, when a stricter verification check would cost portability or add a dependency?
 
-<!-- arc42:generated:quality-attributes -->
+<!-- arc-steward:generated:quality-attributes -->
 | # | Attribute | Scenario | Carried by | Known limit |
 |---|---|---|---|---|
 | 1 | Trustworthiness of the output | A diagram names a path or ER entity that no longer exists; the run fails instead of shipping the stale name | Reference annotations checked against the repository and the schema sources; the evidence rule | Component names inside `flowchart` diagrams are not checked against the code, and Mermaid is sanity-checked, not parsed |
@@ -17,7 +17,7 @@ example, when a stricter verification check would cost portability or add a depe
 | 6 | Reviewability | A reviewer sees the documentation change rendered in the pull request diff, next to the code that caused it | Mermaid only, no render step | Mermaid ER diagrams cannot show indexes or check constraints |
 | 7 | Confidentiality | No schema is sent to a third-party render service to draw a diagram | Mermaid only — no PlantUML or Kroki server | Code and schema are still visible to GitHub and to the agent's model provider |
 
-<!-- arc42:refs
+<!-- arc-steward:refs
 README.md
 SKILL.md
 conventions.md
@@ -25,7 +25,7 @@ scripts/verify.py
 scripts/checks/routing.py
 tests/test_canon_sync.py
 -->
-<!-- /arc42:generated -->
+<!-- /arc-steward:generated -->
 
 Sources: [Design principles](../../README.md#design-principles) and
 [`conventions.md`](../../conventions.md).

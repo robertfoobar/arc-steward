@@ -13,8 +13,8 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 import verify
 from checks import routing
 
-DOCS = REPO_ROOT / "docs" / "arc42"
-MARKER_LINE_RE = re.compile(r"^<!-- (arc42:generated:[a-z0-9-]+ -->|/arc42:generated -->|arc42:refs)$")
+DOCS = REPO_ROOT / "docs" / "architecture"
+MARKER_LINE_RE = re.compile(r"^<!-- (arc-steward:generated:[a-z0-9-]+ -->|/arc-steward:generated -->|arc-steward:refs)$")
 PATTERN_RE = re.compile(r"`([^`]+)`")
 INVISIBLE_CATEGORY = "Cf"
 GIT_DIR = ".git"

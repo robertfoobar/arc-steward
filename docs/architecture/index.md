@@ -4,8 +4,8 @@ This is the architecture documentation of arc-steward itself, following Simon Br
 [Software Guidebook](https://leanpub.com/software-architecture-for-developers), in English. It is
 maintained by arc-steward: before each pull request, the refresh step that
 [`CONTRIBUTING.md`](../../CONTRIBUTING.md#before-opening-a-pr) asks for updates the generated
-blocks from the feature diff through [`arc42.routing.md`](arc42.routing.md). The directory is called `docs/arc42/` whatever the
-standard — see decision 9 in the [decision log](14-decision-log.md).
+blocks from the feature diff through [`arc-steward.routing.md`](arc-steward.routing.md). The directory and marker names are tool conventions, independent of the standard — see
+decision 11 in the [decision log](14-decision-log.md).
 
 ## Chapters
 
@@ -26,7 +26,7 @@ such content, or the content is maintained elsewhere and linked here.
 
 | # | Chapter | Why it is absent |
 |---|---|---|
-| 07 | External interfaces | The interfaces are the `SKILL.md` frontmatter the harness reads, the `verify.py` command line, the routing file format, and the marker and reference syntax target repositories carry. They are specified in [`SKILL.md`](../../SKILL.md#verification), the [routing template](../../templates/arc42.routing.template.md) and [`conventions.md`](../../conventions.md#2-provenance-markers), and summarized in [chapter 06](06-software-architecture.md#checks) |
+| 07 | External interfaces | The interfaces are the `SKILL.md` frontmatter the harness reads, the `verify.py` command line, the routing file format, and the marker and reference syntax target repositories carry. They are specified in [`SKILL.md`](../../SKILL.md#verification), the [routing template](../../templates/arc-steward.routing.template.md) and [`conventions.md`](../../conventions.md#2-provenance-markers), and summarized in [chapter 06](06-software-architecture.md#checks) |
 | 08 | Code | A few hundred lines of standard-library Python in small single-purpose modules; the component diagram in [chapter 06](06-software-architecture.md#components) covers them at the level a reader needs |
 | 09 | Data | No database and no persisted state beyond the Markdown files the skill writes |
 | 10 | Infrastructure architecture | No infrastructure of its own — the skill runs inside the developer's agent harness; CI runs on GitHub-hosted runners, defined in [`ci.yml`](../../.github/workflows/ci.yml) |
@@ -37,7 +37,7 @@ such content, or the content is maintained elsewhere and linked here.
 ## Verifying this set
 
 ```bash
-python3 scripts/verify.py docs/arc42 --repo-root .
+python3 scripts/verify.py docs/architecture --repo-root .
 ```
 
 No `--schema-glob` is passed, because the project has no schema sources. The unit test suite runs
