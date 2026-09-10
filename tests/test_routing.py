@@ -7,6 +7,9 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "scripts"))
 
 from checks import routing
 
+TEMPLATES = pathlib.Path(__file__).resolve().parents[1] / "templates"
+ROUTING_TEMPLATE = "arc-steward.routing.template.md"
+
 ARC42_ALL = [
     "01-introduction-and-goals.md",
     "02-constraints.md",
@@ -43,6 +46,38 @@ class RoutingTest(unittest.TestCase):
 
     def test_absent_routing_file_is_not_a_finding(self):
         self.assertEqual(routing.check_routing(self.docs), [])
+
+    def test_template_placeholder_left_in_place_is_a_finding(self):
+        self.write_documents(ARC42_ALL)
+        self.write_routing(
+            "## Documents\n\n`all`\n\n"
+            "## Path routing\n\n"
+            "| Path pattern | Artifacts |\n|---|---|\n"
+            "| EXAMPLE — `backend/src/domain/**` | 05 building blocks |\n"
+        )
+        findings = routing.check_routing(self.docs)
+        self.assertEqual([f.line for f in findings], [9])
+        self.assertIn("template placeholder", findings[0].message)
+
+    def test_unedited_template_fails_on_every_placeholder(self):
+        self.write_documents(ARC42_ALL)
+        template = TEMPLATES / ROUTING_TEMPLATE
+        (self.docs / routing.ROUTING_FILENAME).write_text(template.read_text())
+        placeholders = [
+            number
+            for number, line in enumerate(template.read_text().splitlines(), start=1)
+            if "EXAMPLE" in line
+        ]
+        placeholder_findings = [
+            f.line for f in routing.check_routing(self.docs) if "template placeholder" in f.message
+        ]
+        self.assertTrue(placeholders)
+        self.assertEqual(placeholder_findings, placeholders)
+
+    def test_template_file_is_named_after_the_routing_file(self):
+        self.assertEqual(ROUTING_TEMPLATE, "arc-steward.routing.template.md")
+        self.assertEqual(routing.ROUTING_FILENAME, "arc-steward.routing.md")
+        self.assertTrue((TEMPLATES / ROUTING_TEMPLATE).is_file())
 
     def test_full_arc42_set_passes(self):
         self.write_documents(ARC42_ALL)

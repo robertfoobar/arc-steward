@@ -75,9 +75,9 @@ chapter by chapter.
 - **Verify before finishing.** The harness checks what it can check mechanically: diagram
   type is recognized and brackets, `subgraph`/`end` pairs and provenance markers balance;
   `erDiagram` entity names resolve against the configured schema sources; internal links and
-  anchors resolve; the routing configuration agrees with what is on disk. It does not parse
-  Mermaid, and component names in `flowchart` diagrams are not checked against the code — see
-  `conventions.md` for the exact rules.
+  anchors resolve; the routing configuration agrees with what is on disk and carries no leftover
+  template placeholder. It does not parse Mermaid, and component names in `flowchart` diagrams
+  are not checked against the code — see `conventions.md` for the exact rules.
 - **Configuration is checked, not trusted.** A routing table pointing at a chapter that does not
   exist is the one failure that cannot be noticed by reading the output, because "nothing to
   update" and "nothing found" look identical. The harness fails the run instead.
@@ -111,7 +111,9 @@ doesn't get picked up, look for that harness's own skills directory convention.
 
 Then ask your agent to bootstrap: *"Set up the architecture documentation for this repo."* Add
 *"use the Software Guidebook"* or *"only chapters 1, 3, 5 and 9"* if you want something other
-than a full arc42 set; the agent will confirm both before writing anything.
+than a full arc42 set; the agent will confirm both before writing anything. The set is written to
+`docs/architecture/`; if that directory already holds content the skill didn't create, the agent
+stops and asks you to move it or abort.
 
 The verification harness needs nothing but `python3` — no pip install, no Node. It runs via
 each harness's generic shell tool, so it needs no Claude-Code-specific mechanism.
