@@ -4,6 +4,8 @@ from checks.finding import Finding
 
 CHECK = "routing"
 ROUTING_FILENAME = "arc-steward.routing.md"
+FORMAT_VERSION = 1
+FORMAT_SECTION = "format version"
 DEFAULT_STANDARD = "arc42"
 DEFAULT_LANGUAGE = "en"
 ALL_DOCUMENTS = "all"
@@ -49,12 +51,20 @@ GUIDEBOOK_CHAPTERS = {
 STANDARDS = {"arc42": ARC42_CHAPTERS, "guidebook": GUIDEBOOK_CHAPTERS}
 LANGUAGES = ("en", "de")
 
-_HEADING_RE = re.compile(r"^##\s+(.*?)\s*$")
-_TOKEN_RE = re.compile(r"^`?([a-z0-9_-]+)`?$")
+_HEADING_RE = re.compile(r"^ {0,3}##[ \t]+(.*?)(?:[ \t]+#+)?[ \t]*$")
+_TOKEN_RE = re.compile(r"^(?:`([a-z0-9_-]+)`|([a-z0-9_-]+))$")
 _LIST_ITEM_RE = re.compile(r"^\s*[-*]\s+(.*)$")
 _LEADING_CHAPTER_RE = re.compile(r"^`?(\d{2})\b")
 _CHAPTER_RE = re.compile(r"\b(\d{2})\b")
 _PLACEHOLDER_RE = re.compile(r"\bEXAMPLE\b")
+_VERSION_RE = re.compile(r"^(?:`([1-9][0-9]{0,2})`|([1-9][0-9]{0,2}))$")
+
+
+def _headings(lines):
+    for number, line in enumerate(lines, start=1):
+        heading = _HEADING_RE.match(line)
+        if heading:
+            yield number, heading.group(1).strip().lower()
 
 
 def _sections(lines):
@@ -71,15 +81,43 @@ def _sections(lines):
     return result
 
 
-def _first_token(section):
+def _repeated_headings(lines):
+    seen = set()
+    for number, name in _headings(lines):
+        if name in seen:
+            yield number, name
+        seen.add(name)
+
+
+def _first_value_line(section):
     for number, line in section or []:
         stripped = line.strip()
-        if not stripped or stripped.startswith(">"):
-            continue
-        token = _TOKEN_RE.match(stripped)
-        if token:
-            return number, token.group(1)
+        if stripped:
+            return number, stripped
     return None, None
+
+
+def _matched_value(regex, text):
+    match = regex.match(text)
+    if not match:
+        return None
+    return match.group(1) or match.group(2)
+
+
+def _single_value(section, label):
+    number, text = _first_value_line(section)
+    if text is None:
+        return None, None, None
+    token = _matched_value(_TOKEN_RE, text)
+    if token:
+        return number, token, None
+    finding = Finding(
+        ROUTING_FILENAME,
+        number,
+        CHECK,
+        f"{label} must be a single value on the first line of its section, found: {text}",
+    )
+    return number, None, finding
 
 
 def _document_ids(section):
@@ -141,15 +179,78 @@ def _placeholder_findings(lines):
     ]
 
 
+def _read_lines(path):
+    return path.read_text(encoding="utf-8", errors="replace").lstrip("\ufeff").splitlines()
+
+
+def _format_finding(line, message):
+    return Finding(ROUTING_FILENAME, line, CHECK, message)
+
+
+def check_format(docs_dir):
+    path = routing_path(docs_dir)
+    if not path.is_file():
+        return None
+    lines = _read_lines(path)
+    headings = [number for number, name in _headings(lines) if name == FORMAT_SECTION]
+    if not headings:
+        return None
+    if len(headings) > 1:
+        return _format_finding(
+            headings[1],
+            "the format version section appears more than once, so the format version is ambiguous",
+        )
+    number, text = _first_value_line(_sections(lines)[FORMAT_SECTION])
+    value = _matched_value(_VERSION_RE, text) if text is not None else None
+    if value is None:
+        return _format_finding(
+            number or headings[0],
+            f"unparseable format version {text or '(empty section)'}, expected a single positive "
+            f"integer such as `{FORMAT_VERSION}`",
+        )
+    version = int(value)
+    if version > FORMAT_VERSION:
+        return _format_finding(
+            number,
+            f"this set uses format version {version}, newer than this arc-steward, which supports "
+            f"{FORMAT_VERSION} — update the skill before running it on this set",
+        )
+    if version < FORMAT_VERSION:
+        return _format_finding(
+            number,
+            f"this set uses format version {version}, older than this arc-steward, which supports "
+            f"{FORMAT_VERSION} — migrate it as described in the release notes of the release that "
+            f"introduced format version {FORMAT_VERSION}",
+        )
+    return None
+
+
+def _repeated_heading_findings(lines):
+    return [
+        Finding(
+            ROUTING_FILENAME,
+            number,
+            CHECK,
+            f"section '{name}' appears more than once, keep exactly one",
+        )
+        for number, name in _repeated_headings(lines)
+    ]
+
+
 def check_routing(docs_dir):
     path = routing_path(docs_dir)
     if not path.is_file():
         return []
-    lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
+    lines = _read_lines(path)
     sections = _sections(lines)
-    findings = _placeholder_findings(lines)
+    findings = _placeholder_findings(lines) + _repeated_heading_findings(lines)
 
-    standard_line, standard = _first_token(sections.get("documentation standard"))
+    standard_line, standard, unparseable = _single_value(
+        sections.get("documentation standard"), "documentation standard"
+    )
+    if unparseable:
+        findings.append(unparseable)
+        return findings
     if standard is None:
         standard = DEFAULT_STANDARD
     elif standard not in STANDARDS:
@@ -164,7 +265,12 @@ def check_routing(docs_dir):
         )
         return findings
 
-    language_line, language = _first_token(sections.get("documentation language"))
+    language_line, language, unparseable = _single_value(
+        sections.get("documentation language"), "documentation language"
+    )
+    if unparseable:
+        findings.append(unparseable)
+        return findings
     if language is None:
         language = DEFAULT_LANGUAGE
     elif language not in LANGUAGES:
@@ -177,7 +283,7 @@ def check_routing(docs_dir):
                 + ", ".join(LANGUAGES),
             )
         )
-        language = DEFAULT_LANGUAGE
+        return findings
 
     chapters = STANDARDS[standard]
     selected = _document_ids(sections.get("documents"))

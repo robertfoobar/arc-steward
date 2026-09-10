@@ -52,6 +52,10 @@ def _report_routing(docs_dir):
     )
 
 
+def _print_finding(item):
+    print(f"{item.path}:{item.line}: [{item.check}] {item.message}")
+
+
 def main(argv):
     args = _parse(argv)
     docs_dir = pathlib.Path(args.docs_dir)
@@ -61,6 +65,11 @@ def main(argv):
         return 2
     _report_schema_globs(repo_root, args.schema_glob)
     _report_routing(docs_dir)
+    format_finding = routing.check_format(docs_dir)
+    if format_finding:
+        _print_finding(format_finding)
+        print("arc-steward: stopped before any other check, resolve the format version first")
+        return 1
     findings, document_count = _collect(docs_dir, repo_root, args.schema_glob)
     if document_count == 0:
         print(f"arc-steward: no documentation files found under {docs_dir}")
@@ -69,7 +78,7 @@ def main(argv):
         print(f"arc-steward: {CHECK_COUNT} checks passed across {document_count} document(s)")
         return 0
     for item in sorted(findings, key=lambda f: (f.path, f.line, f.check)):
-        print(f"{item.path}:{item.line}: [{item.check}] {item.message}")
+        _print_finding(item)
     print(
         f"arc-steward: {len(findings)} finding(s) across {CHECK_COUNT} checks "
         f"in {document_count} document(s)"

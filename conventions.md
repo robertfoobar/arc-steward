@@ -221,3 +221,20 @@ Where no such source exists in the repository, the evidence rule from section 5 
 the gap with `⚠️ TODO(human): <specific question>` instead of writing the orientation paragraph
 anyway. Every link to a source must be relative and resolvable within the repository — the link
 checker (`scripts/checks/links.py`) fails the run on a link target that does not exist.
+
+## 7. Format version
+
+Everything this skill persists in a repository — the documentation directory, the routing file
+and its sections, the marker syntax, the chapter file names and the data-model layout — is one
+versioned format. The current format version is `1`.
+
+The routing file records the version it was written in, in its **Format version** section. An
+absent section means `1`. If the section is present, its first non-empty line is the version
+alone, one positive integer; anything else is a finding. The verification harness compares it
+with the version it supports before any other check and stops on a mismatch: an older set needs
+the migration described in the release notes, a newer one needs a newer skill.
+
+One path is fixed across all format versions: `docs/architecture/arc-steward.routing.md`. It is
+how a newer skill finds a set written by an older one, so no format change may move or rename
+it. Everything else may change, but only with a format bump: any change that requires migrating
+an existing set raises the format version, and every format bump is a major release.

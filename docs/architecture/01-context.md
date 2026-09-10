@@ -9,7 +9,7 @@ drifting away from the code — see [Why avoid architecture drift](../../README.
 <!-- arc-steward:generated:context -->
 ```mermaid
 flowchart TD
-  Developer["Developer"] -->|installs via git clone and symlink| Steward
+  Developer["Developer"] -->|installs a release tag via git clone and symlink| Steward
   Developer -->|asks for bootstrap or refresh| Harness
   Harness["Agent harness"] -->|loads SKILL.md, which sends the agent on to conventions.md| Steward["arc-steward"]
   Steward -->|reads code, git diff and routing file of| Repo["Target repository"]
@@ -28,7 +28,7 @@ scripts/verify.py
 
 | Element | Role |
 |---|---|
-| Developer | Installs the skill once, then asks the agent to bootstrap or refresh the documentation |
+| Developer | Installs a tagged release, then asks the agent to bootstrap or refresh the documentation |
 | Agent harness | Loads `SKILL.md`, lets the agent execute its procedure, runs the harness through its generic shell tool |
 | Target repository | Source of evidence (code, diff, schema sources) and home of the documentation set and its routing file |
 | python3 runtime | Runs `scripts/verify.py`; standard library only |

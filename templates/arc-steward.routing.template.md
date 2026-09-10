@@ -8,6 +8,14 @@ Read by the `arc-steward` skill. Edit this file, not the skill.
 > every line that still carries the placeholder marker, because a leftover example produces a
 > routing table that matches nothing in a different stack.
 
+## Format version
+
+`1`
+
+Which version of arc-steward's persisted format this set follows: the directory, this file, the
+markers, the chapter file names and the data-model layout. A newer arc-steward reads it to recognize a set written by an
+older one. Do not change it by hand, a migration does.
+
 ## Documentation standard
 
 `arc42`

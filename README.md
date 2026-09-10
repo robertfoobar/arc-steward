@@ -91,9 +91,13 @@ skills directory:
 
 ```bash
 git clone https://github.com/robertfoobar/arc-steward.git
+git -C arc-steward checkout "$(git -C arc-steward describe --tags --abbrev=0)"
 mkdir -p ~/.agents/skills
 ln -sf "$PWD/arc-steward" ~/.agents/skills/arc-steward
 ```
+
+The second line checks out the latest release; `main` is the development branch. Git's
+detached-HEAD notice is expected.
 
 Whether that's enough, or you need a second, harness-specific symlink, depends on the harness.
 Verified so far:
@@ -120,11 +124,24 @@ each harness's generic shell tool, so it needs no Claude-Code-specific mechanism
 
 ### Updating
 
-The symlinks point at your clone, so pulling updates there is enough — no re-linking needed:
+Read the release notes, then check out the latest release. The symlinks point at your clone, so
+no re-linking is needed:
 
 ```bash
-git -C arc-steward pull
+git -C arc-steward fetch --tags
+git -C arc-steward checkout "$(git -C arc-steward describe --tags --abbrev=0 origin/main)"
 ```
+
+To stay on a major version, match its tags, for example `--match 'v1.*'` in the `describe` call.
+
+### Versioning
+
+Releases are tagged `vMAJOR.MINOR.PATCH`, and the version number describes what the skill
+persists in your repository. A major release means an existing documentation set has to be
+migrated — its release notes explain how, with a migration script where practical. Minor and
+patch releases never require a migration, though a new check may report findings, which the
+release notes announce. A set records its format version, and the skill refuses to
+work on one written in a different format instead of failing silently.
 
 ## License
 

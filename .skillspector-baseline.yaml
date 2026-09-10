@@ -15,36 +15,43 @@ rules:
     on any HTML comment in docs/architecture that is not marker syntax, and on invisible format
     characters.
 fingerprints:
-- hash: sha256:b48f5b04f496202b846d704d5fe9fb22c054bb6513c9814f119ddcca2cc3b551
+- hash: sha256:23334cd712d72fdb0864c3d6821e0fcd6b5752ec2725dec0eaf7537203dbb139
   rule_id: P2
   file: conventions.md
   reason: >-
     Documents the skill's own <!-- arc-steward:generated:id --> HTML-comment marker
     convention. It is data markup read by scripts/checks/markers.py, not an instruction
     directed at an agent.
-- hash: sha256:c2d27c1bbda1d539b6cbf1eb9162fe73c450a8b6f12c57a61b26e2a6f09cfffe
+- hash: sha256:13845a80007f2d8873222116c0b40a3f9570e7547df44d3efaf1003016e27c52
   rule_id: RA2
   file: README.md
   reason: >-
     User-run installation command (git clone + symlink into ~/.agents/skills) shown in the
     README for the human installing the skill, not persistence an agent establishes on its
     own during a session.
-- hash: sha256:0c38fec79c39ead116e0614415dc2d22d3170facf4b921d8a750efd4b4456458
+- hash: sha256:6a7aafc5f6b1dae385fd15e8f3a10787ee9a152103b2de1df1588a595ebdd98a
   rule_id: AS3
   file: README.md
   reason: >-
     Table cell naming the ~/.claude/skills path as an install target. The skill contains no
     code that lists, reads, or otherwise enumerates other skills' directories or files.
-- hash: sha256:16c825de16818dcb65ae9acd6a32f48ee857a8b292423d5db02efdc3cb520ec1
+- hash: sha256:b0cbf0e57c795161b9671b79b6d10e9688fb311e89dbc7024f91174bab0061d0
   rule_id: RA2
   file: README.md
   reason: >-
     Same installation-table cell as the AS3 finding above: a user-run symlink command in the
     README, not agent-established runtime persistence.
-- hash: sha256:60301112f92551e16463286acd4932d9c176592d9596e7a390e4e3af0d29f459
+- hash: sha256:d580cd8a6d784bdd6f466a853dad1019f5f9db3ab802a4ff3471d314c97e933a
   rule_id: RA2
   file: SKILL.md
   reason: >-
     Flags the skill's declared tool scope next to its documented purpose of writing
     docs/architecture/ files across runs — the skill's core, git-tracked, user-visible
     function, not covert persistence.
+- hash: sha256:b2e16347b88541fbda97deb20687783c74c8bdba8135fb6c6078f025b0d9fc23
+  rule_id: P2
+  file: tests/fixtures/format-1/docs/architecture/01-context.md
+  reason: >-
+    Frozen format-1 test fixture, read only by tests/test_format_1_fixture.py and never loaded
+    into an agent's context. P2 matches from its arc-steward:generated marker to the next '-->',
+    which here is a Mermaid arrow. The file must never change, so its fingerprint stays valid.

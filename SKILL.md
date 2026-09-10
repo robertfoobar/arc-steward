@@ -12,6 +12,13 @@ routing file decides, not `index.md`: `docs/architecture/` is a common directory
 already hold an unrelated `index.md`, while only this skill creates the routing file. An explicit
 mode in the request overrides the detection.
 
+Before either mode, whichever was requested: if the routing file exists, compare its **Format
+version** with the current one in `conventions.md` §7 (an absent section means `1`). On any
+difference, or a value that is not a single integer, stop, tell the human which version the set
+has and which this skill supports, and write nothing — an older set needs the migration from the
+release notes, a newer one needs a newer skill. The verification harness stops on the same
+mismatch with a single finding; never resolve it by editing the set until the findings go away.
+
 The documentation set is described by two values in the routing file, both read before anything
 is written:
 
@@ -48,8 +55,9 @@ marker syntax and one diagram convention per artifact.
    repository, not a preference for less work — see `conventions.md` §1.4. Only once everything
    from step 1 and 2 is confirmed, create `docs/architecture/` and write
    `docs/architecture/arc-steward.routing.md` in a single write: the structure of
-   `templates/arc-steward.routing.template.md` with all seven sections already holding the agreed
-   values and no placeholder marked `EXAMPLE` left — the harness fails on any that remain. The
+   `templates/arc-steward.routing.template.md` with all eight sections already holding the agreed
+   values, the **Format version** set to the current one from `conventions.md` §7, and no
+   placeholder marked `EXAMPLE` left — the harness fails on any that remain. The
    routing file is written last and whole on purpose: its presence switches the next run to
    refresh, so no session may end with a routing file that holds unconfirmed values.
 3. Create `docs/architecture/index.md` (entry point and chapter overview) plus every selected

@@ -16,6 +16,7 @@ example, when a stricter verification check would cost portability or add a depe
 | 5 | Portability | The skill runs in any harness that reads `~/.agents/skills/`, with nothing installed but `python3` and `git` | Standard-library-only harness, invoked through the harness's generic shell tool; the skill path is resolved from wherever it was loaded | Only the harnesses listed under Installation in the README are verified |
 | 6 | Reviewability | A reviewer sees the documentation change rendered in the pull request diff, next to the code that caused it | Mermaid only, no render step | Mermaid ER diagrams cannot show indexes or check constraints |
 | 7 | Confidentiality | No schema is sent to a third-party render service to draw a diagram | Mermaid only — no PlantUML or Kroki server | Code and schema are still visible to GitHub and to the agent's model provider |
+| 8 | Upgrade safety | A newer or older skill meets a set written in another format version; it stops with one finding instead of passing silently or starting a second tree | Format version in the routing file, checked first by `scripts/checks/routing.py`; the routing file path never changes across format versions; `tests/test_format_version.py` keeps the version equal in code, conventions and template; `tests/test_format_1_fixture.py` fails when a format-1 set stops being recognized without a format bump | Detection only — migrating a set is left to the release notes and a migration script shipped with the major release |
 
 <!-- arc-steward:refs
 README.md
@@ -24,6 +25,8 @@ conventions.md
 scripts/verify.py
 scripts/checks/routing.py
 tests/test_canon_sync.py
+tests/test_format_version.py
+tests/test_format_1_fixture.py
 -->
 <!-- /arc-steward:generated -->
 
