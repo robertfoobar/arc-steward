@@ -1,23 +1,27 @@
-# arc42-refresh
+# arc-steward
 
 An [Agent Skill](https://agentskills.io) that keeps a fixed canon of architecture
 documentation artifacts up to date **after every feature**, rolled up into a complete
 [arc42](https://arc42.org) or [Software Guidebook](https://leanpub.com/software-architecture-for-developers)
 documentation set.
 
-## Why another arc42 skill
+## Why avoid architecture drift
 
-The existing ones — [arc42-toolkit](https://github.com/MSiccDev/arc42-toolkit),
-[generating-arc42](https://github.com/alicommit-malp/generating-arc42),
-[enterprise-architecture-skill](https://github.com/gauravs19/enterprise-architecture-skill) —
-are *first-creation* tools: analyse the repo, interview the architect, emit twelve chapters.
-They solve the blank page.
+Architecture documentation rots the moment nobody tends it. Every feature moves a boundary, adds
+a dependency, or touches the data model, and the diagrams describing the system keep asserting
+what used to be true. That gap between diagram and code is architecture drift — and past a
+certain point nobody trusts the diagram enough to open it, so the documentation stops being read
+at all.
 
-They do not solve the harder problem: the documentation is stale two weeks later.
+Drift compounds silently: nothing breaks when a diagram goes stale, so nothing forces a fix.
+Closing the gap later means reconstructing weeks or months of decisions from memory, which is
+expensive enough that it rarely happens — the documentation just stays wrong.
 
-`arc42-refresh` is built for the steady state. It reads the feature diff, decides which
-artifacts the change actually touches, and patches only those — surgically, leaving
-hand-written prose intact.
+`arc-steward` closes the gap at the one point where closing it is cheap: right before a feature
+becomes a pull request, while the diff that changed the architecture is still in front of you. It
+reads that diff, decides which artifacts it actually touches, and patches only those —
+surgically, leaving hand-written prose intact — so the documentation never gets the two stale
+weeks in the first place.
 
 ## The artifact canon
 
@@ -79,18 +83,43 @@ chapter by chapter.
 
 ## Installation
 
-Clone the repository and symlink it into your skills directory:
+Clone the repository anywhere, then symlink it into `~/.agents/skills/` — the cross-runtime
+skills directory:
 
 ```bash
-git clone git@github.com:robertfoobar/arc42-refresh.git ~/projects/arc42-refresh
-ln -s ~/projects/arc42-refresh ~/.claude/skills/arc42-refresh
+git clone https://github.com/robertfoobar/arc-steward.git
+mkdir -p ~/.agents/skills
+ln -sf "$PWD/arc-steward" ~/.agents/skills/arc-steward
 ```
+
+Whether that's enough, or you need a second, harness-specific symlink, depends on the harness.
+Verified so far:
+
+| Harness | Reads `~/.agents/skills/` | Extra step |
+|---|---|---|
+| OpenCode | Yes | None |
+| Codex CLI | Yes | None |
+| GitHub Copilot CLI | Yes | None |
+| Gemini CLI | Yes | None |
+| Claude Code | No | `mkdir -p ~/.claude/skills && ln -sf "$PWD/arc-steward" ~/.claude/skills/arc-steward` |
+
+Other harnesses (Cursor, Antigravity, Pi, ...) haven't been checked — if `~/.agents/skills/`
+doesn't get picked up, look for that harness's own skills directory convention.
 
 Then ask your agent to bootstrap: *"Set up the architecture documentation for this repo."* Add
 *"use the Software Guidebook"* or *"only chapters 1, 3, 5 and 9"* if you want something other
 than a full arc42 set; the agent will confirm both before writing anything.
 
-The verification harness needs nothing but `python3` — no pip install, no Node.
+The verification harness needs nothing but `python3` — no pip install, no Node. It runs via
+each harness's generic shell tool, so it needs no Claude-Code-specific mechanism.
+
+### Updating
+
+The symlinks point at your clone, so pulling updates there is enough — no re-linking needed:
+
+```bash
+git -C arc-steward pull
+```
 
 ## License
 

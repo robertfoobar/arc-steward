@@ -1,9 +1,10 @@
 ---
-name: arc42-refresh
+name: arc-steward
 description: Use when a feature is complete and about to become a pull request, to bring the architecture documentation back in sync - refreshes context, component, deployment, sequence and ER diagrams from the feature diff. Also use to bootstrap architecture documentation in a repository that has none, following arc42 or Simon Brown's Software Guidebook, with all chapters or a selected subset.
+allowed-tools: Read Write Edit Bash(git:*) Bash(python3:*)
 ---
 
-# arc42-refresh
+# arc-steward
 
 Keeps a fixed canon of architecture documentation current. Two modes, selected automatically:
 `docs/arc42/index.md` missing means **bootstrap**, otherwise **refresh**. An explicit mode in the
@@ -86,10 +87,13 @@ marker syntax and one diagram convention per artifact.
 ## Verification
 
 Run from the repository root, with one `--schema-glob` per entry in the routing file's schema
-sources:
+sources. `<skill-dir>` is the directory this SKILL.md was loaded from — e.g.
+`~/.claude/skills/arc-steward`, `~/.agents/skills/arc-steward`, or a project-local
+`.agents/skills/arc-steward` — never hard-code one location, since it varies by harness and
+install:
 
 ```bash
-python3 ~/.claude/skills/arc42-refresh/scripts/verify.py docs/arc42 \
+python3 <skill-dir>/scripts/verify.py docs/arc42 \
   --repo-root . \
   --schema-glob 'backend/src/db/migrations/*.sql'
 ```

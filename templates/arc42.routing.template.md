@@ -1,6 +1,6 @@
 # Documentation Routing Configuration
 
-Read by the `arc42-refresh` skill. Edit this file, not the skill.
+Read by the `arc-steward` skill. Edit this file, not the skill.
 
 > Every example value below — the schema glob, the bounded contexts, the business flow, and the
 > four path-routing rows — is illustrative only, drawn from a hypothetical Python/SQL backend.
