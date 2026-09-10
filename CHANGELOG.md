@@ -7,6 +7,8 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-09-10
+
 ### Fixed
 
 - The install commands in the README use `ln -sfn`, so re-running them replaces an existing
@@ -27,5 +29,6 @@ First public release.
 - Format version 1 of the persisted format, recorded in the routing file and checked before
   anything else, so a set written in another format stops the skill instead of failing silently.
 
-[Unreleased]: https://github.com/robertfoobar/arc-steward/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/robertfoobar/arc-steward/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/robertfoobar/arc-steward/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/robertfoobar/arc-steward/releases/tag/v1.0.0
