@@ -7,6 +7,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- The install commands in the README use `ln -sfn`, so re-running them replaces an existing
+  link instead of nesting a new one inside the linked directory (#14).
+
 ## [1.0.0] - 2026-09-10
 
 First public release.

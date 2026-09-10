@@ -22,20 +22,20 @@ fingerprints:
     Documents the skill's own <!-- arc-steward:generated:id --> HTML-comment marker
     convention. It is data markup read by scripts/checks/markers.py, not an instruction
     directed at an agent.
-- hash: sha256:13845a80007f2d8873222116c0b40a3f9570e7547df44d3efaf1003016e27c52
+- hash: sha256:6d1bd9862866916d14ca6d9f447c39d60976ce1ab3244b2ba622467e6ca3830e
   rule_id: RA2
   file: README.md
   reason: >-
     User-run installation command (git clone + symlink into ~/.agents/skills) shown in the
     README for the human installing the skill, not persistence an agent establishes on its
     own during a session.
-- hash: sha256:6a7aafc5f6b1dae385fd15e8f3a10787ee9a152103b2de1df1588a595ebdd98a
+- hash: sha256:a828a07a85bb89e155f738b86c0e6bf1808a115e39e19ad8fab024dc1adf984e
   rule_id: AS3
   file: README.md
   reason: >-
     Table cell naming the ~/.claude/skills path as an install target. The skill contains no
     code that lists, reads, or otherwise enumerates other skills' directories or files.
-- hash: sha256:b0cbf0e57c795161b9671b79b6d10e9688fb311e89dbc7024f91174bab0061d0
+- hash: sha256:3d90f6ede3a24a0e6f577acdc871bf508ece346b1249165ea2b80ce210133771
   rule_id: RA2
   file: README.md
   reason: >-
