@@ -1,7 +1,7 @@
 ---
 name: arc-steward
 description: Use when a feature is complete and about to become a pull request, to bring the architecture documentation back in sync - refreshes context, component, deployment, sequence and ER diagrams from the feature diff. Also use to bootstrap architecture documentation in a repository that has none, following arc42 or Simon Brown's Software Guidebook, with all chapters or a selected subset.
-allowed-tools: Read Write Edit Bash(git:*) Bash(python3:*)
+allowed-tools: Read Write Edit
 ---
 
 # arc-steward

@@ -7,6 +7,15 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Security
+
+- Narrow `allowed-tools` to `Read Write Edit`, dropping the `Bash(git:*)` and `Bash(python3:*)`
+  wildcards. Both pre-approved arbitrary code execution for the invoking turn — `git -c
+  alias.x='!sh'` and `python3 -c` run shell code while still matching the wildcard — which
+  combined with untrusted repository content read into context enabled prompt-free execution.
+  Read-only git forms stay prompt-free via the harness's built-in read-only set; `verify.py`
+  now prompts once per run.
+
 ## [1.0.1] - 2026-09-10
 
 ### Fixed
