@@ -1,6 +1,6 @@
 import re
 
-from checks import fences
+from checks import fences, safeio
 from checks.finding import Finding
 
 CHECK = "references"
@@ -55,8 +55,9 @@ def _schema_text(repo_root, schema_globs):
     chunks = []
     for pattern in schema_globs:
         for candidate in sorted(repo_root.glob(pattern)):
-            if candidate.is_file():
-                chunks.append(candidate.read_text(encoding="utf-8", errors="replace"))
+            content = safeio.read_text(candidate)
+            if content is not None:
+                chunks.append(content)
     return COMMENT_RE.sub(" ", "\n".join(chunks))
 
 

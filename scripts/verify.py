@@ -4,9 +4,11 @@ import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 
-from checks import links, markers, mermaid, references, routing
+from checks import links, markers, mermaid, references, routing, safeio
+from checks.finding import Finding
 
 CHECK_COUNT = 5
+FILES_CHECK = "files"
 
 
 def _parse(argv):
@@ -18,17 +20,23 @@ def _parse(argv):
 
 
 def _collect(docs_dir, repo_root, schema_globs):
-    documents = sorted(docs_dir.rglob("*.md"))
     findings = []
-    for document in documents:
-        text = document.read_text(encoding="utf-8", errors="replace")
+    document_count = 0
+    for document in sorted(safeio.markdown_documents(docs_dir)):
         relative = str(document.relative_to(docs_dir))
+        text = safeio.read_text(document)
+        if text is None:
+            findings.append(
+                Finding(relative, 1, FILES_CHECK, "not a regular file, skipped")
+            )
+            continue
+        document_count += 1
         findings.extend(markers.check_markers(text, relative))
         findings.extend(mermaid.check_mermaid(text, relative))
         findings.extend(references.check_references(text, relative, repo_root, schema_globs))
         findings.extend(links.check_links(text, relative, document))
     findings.extend(routing.check_routing(docs_dir))
-    return findings, len(documents)
+    return findings, document_count
 
 
 def _report_schema_globs(repo_root, schema_globs):
@@ -39,7 +47,9 @@ def _report_schema_globs(repo_root, schema_globs):
         )
         return
     for pattern in schema_globs:
-        matched = sum(1 for candidate in repo_root.glob(pattern) if candidate.is_file())
+        matched = sum(
+            1 for candidate in repo_root.glob(pattern) if safeio.is_regular_file(candidate)
+        )
         print(f"arc-steward: schema glob '{pattern}' matched {matched} file(s)")
 
 
