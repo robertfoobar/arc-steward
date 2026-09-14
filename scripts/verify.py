@@ -47,9 +47,7 @@ def _report_schema_globs(repo_root, schema_globs):
         )
         return
     for pattern in schema_globs:
-        matched = sum(
-            1 for candidate in repo_root.glob(pattern) if safeio.is_regular_file(candidate)
-        )
+        matched = len(safeio.schema_files(repo_root, pattern))
         print(f"arc-steward: schema glob '{pattern}' matched {matched} file(s)")
 
 

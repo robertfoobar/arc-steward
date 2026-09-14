@@ -25,3 +25,20 @@ def markdown_documents(docs_dir):
         for name in files:
             if name.endswith(".md"):
                 yield base / name
+
+
+def schema_files(repo_root, pattern):
+    root = repo_root.resolve()
+    try:
+        candidates = sorted(repo_root.glob(pattern))
+    except (NotImplementedError, ValueError):
+        return []
+    result = []
+    for candidate in candidates:
+        try:
+            resolved = candidate.resolve()
+        except OSError:
+            continue
+        if resolved.is_relative_to(root) and is_regular_file(candidate):
+            result.append(candidate)
+    return result

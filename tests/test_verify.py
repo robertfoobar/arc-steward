@@ -228,5 +228,66 @@ class NonRegularFileTest(unittest.TestCase):
             self.run_main(["--schema-glob", "schema.sql"])
 
 
+class SchemaGlobContainmentTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.base = pathlib.Path(self.tmp.name)
+        self.repo = self.base / "repo"
+        self.docs_dir = self.repo / "docs" / "architecture"
+        self.docs_dir.mkdir(parents=True)
+        self.outside = self.base / "outside"
+        self.outside.mkdir()
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def run_main(self, extra=None):
+        argv = [str(self.docs_dir), "--repo-root", str(self.repo)] + (extra or [])
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            code = verify.main(argv)
+        return code, out.getvalue()
+
+    def _er_document(self):
+        (self.docs_dir / "08.md").write_text(
+            "```mermaid\nerDiagram\n  ghosts {\n    uuid id PK\n  }\n```\n"
+        )
+
+    def test_glob_inside_repo_still_resolves_entities(self):
+        db = self.repo / "db"
+        db.mkdir()
+        (db / "001.sql").write_text("CREATE TABLE ghosts (id uuid);\n")
+        self._er_document()
+        code, output = self.run_main(["--schema-glob", "db/*.sql"])
+        self.assertEqual(code, 0, output)
+        self.assertIn("matched 1 file(s)", output)
+
+    def test_traversal_glob_matches_nothing_and_is_not_read(self):
+        (self.outside / "schema.sql").write_text("CREATE TABLE ghosts (id uuid);\n")
+        self._er_document()
+        code, output = self.run_main(["--schema-glob", "../outside/*.sql"])
+        self.assertIn("matched 0 file(s)", output)
+        self.assertEqual(code, 1)
+        self.assertIn("ghosts", output)
+
+    def test_absolute_glob_does_not_crash(self):
+        (self.docs_dir / "05.md").write_text("# Building Blocks\n")
+        code, output = self.run_main(["--schema-glob", "/etc/pass*"])
+        self.assertEqual(code, 0, output)
+        self.assertIn("matched 0 file(s)", output)
+
+    def test_symlinked_schema_source_is_excluded(self):
+        target = self.outside / "schema.sql"
+        target.write_text("CREATE TABLE ghosts (id uuid);\n")
+        db = self.repo / "db"
+        db.mkdir()
+        (db / "link.sql").symlink_to(target)
+        self._er_document()
+        code, output = self.run_main(["--schema-glob", "db/*.sql"])
+        self.assertIn("matched 0 file(s)", output)
+        self.assertEqual(code, 1)
+        self.assertIn("ghosts", output)
+
+
 if __name__ == "__main__":
     unittest.main()
