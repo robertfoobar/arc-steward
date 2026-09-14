@@ -9,6 +9,11 @@ All notable changes to this project are documented here. The format follows
 
 ### Security
 
+- Sanitize control and format characters when printing findings. A referenced path or link target
+  is attacker-controlled text echoed into the finding line; control characters in it (ANSI escape
+  sequences, zero-width or bidirectional marks) are now replaced with a visible escaped form before
+  output, so a crafted document can no longer manipulate the terminal or smuggle hidden text back
+  into an agent's context through a finding.
 - Narrow `allowed-tools` to `Read Write Edit`, dropping the `Bash(git:*)` and `Bash(python3:*)`
   wildcards. Both pre-approved arbitrary code execution for the invoking turn — `git -c
   alias.x='!sh'` and `python3 -c` run shell code while still matching the wildcard — which

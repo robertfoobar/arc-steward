@@ -1,6 +1,7 @@
 import argparse
 import pathlib
 import sys
+import unicodedata
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 
@@ -60,8 +61,15 @@ def _report_routing(docs_dir):
     )
 
 
+def _sanitize(text):
+    return "".join(
+        f"\\u{ord(ch):04x}" if unicodedata.category(ch) in ("Cc", "Cf") else ch
+        for ch in text
+    )
+
+
 def _print_finding(item):
-    print(f"{item.path}:{item.line}: [{item.check}] {item.message}")
+    print(f"{_sanitize(item.path)}:{item.line}: [{item.check}] {_sanitize(item.message)}")
 
 
 def main(argv):

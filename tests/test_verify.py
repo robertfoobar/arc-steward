@@ -289,5 +289,47 @@ class SchemaGlobContainmentTest(unittest.TestCase):
         self.assertIn("ghosts", output)
 
 
+class FindingOutputSanitizationTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = pathlib.Path(self.tmp.name)
+        self.docs_dir = self.root / "docs" / "architecture"
+        self.docs_dir.mkdir(parents=True)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def run_main(self):
+        argv = [str(self.docs_dir), "--repo-root", str(self.root)]
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            code = verify.main(argv)
+        return code, out.getvalue()
+
+    def test_ansi_escape_in_referenced_path_is_not_emitted_raw(self):
+        (self.docs_dir / "05.md").write_text(
+            "<!-- arc-steward:refs\nno/such/\x1b[2K\x1b[1Apath\n-->\n"
+        )
+        code, output = self.run_main()
+        self.assertEqual(code, 1)
+        self.assertNotIn("\x1b", output)
+        self.assertIn("\\u001b", output)
+
+    def test_zero_width_character_in_finding_is_escaped(self):
+        (self.docs_dir / "05.md").write_text(
+            "<!-- arc-steward:refs\nno/such/​path\n-->\n"
+        )
+        code, output = self.run_main()
+        self.assertEqual(code, 1)
+        self.assertNotIn("​", output)
+        self.assertIn("\\u200b", output)
+
+    def test_plain_finding_text_is_unchanged(self):
+        (self.docs_dir / "05.md").write_text("<!-- arc-steward:refs\nno/such/plain-path\n-->\n")
+        code, output = self.run_main()
+        self.assertEqual(code, 1)
+        self.assertIn("no/such/plain-path", output)
+
+
 if __name__ == "__main__":
     unittest.main()
