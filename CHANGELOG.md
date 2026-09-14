@@ -7,13 +7,15 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-09-14
+
+A security-hardening release. No format change, so existing documentation sets need no migration.
+Two entries add stricter checks: a non-regular `*.md` in the docs tree is now a finding, and
+`--schema-glob` candidates outside the repository are dropped, so a run may report findings it
+previously did not.
+
 ### Security
 
-- Sanitize control and format characters when printing findings. A referenced path or link target
-  is attacker-controlled text echoed into the finding line; control characters in it (ANSI escape
-  sequences, zero-width or bidirectional marks) are now replaced with a visible escaped form before
-  output, so a crafted document can no longer manipulate the terminal or smuggle hidden text back
-  into an agent's context through a finding.
 - Narrow `allowed-tools` to `Read Write Edit`, dropping the `Bash(git:*)` and `Bash(python3:*)`
   wildcards. Both pre-approved arbitrary code execution for the invoking turn — `git -c
   alias.x='!sh'` and `python3 -c` run shell code while still matching the wildcard — which
@@ -33,6 +35,11 @@ All notable changes to this project are documented here. The format follows
   repository root is dropped instead of read, so a `..`-traversal pattern can no longer pull in
   out-of-repo content, and an absolute or otherwise unsupported pattern is treated as zero matches
   rather than crashing the run.
+- Sanitize control and format characters when printing findings. A referenced path or link target
+  is attacker-controlled text echoed into the finding line; control characters in it (ANSI escape
+  sequences, zero-width or bidirectional marks) are now replaced with a visible escaped form before
+  output, so a crafted document can no longer manipulate the terminal or smuggle hidden text back
+  into an agent's context through a finding.
 
 ## [1.0.1] - 2026-09-10
 
@@ -56,6 +63,7 @@ First public release.
 - Format version 1 of the persisted format, recorded in the routing file and checked before
   anything else, so a set written in another format stops the skill instead of failing silently.
 
-[Unreleased]: https://github.com/robertfoobar/arc-steward/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/robertfoobar/arc-steward/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/robertfoobar/arc-steward/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/robertfoobar/arc-steward/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/robertfoobar/arc-steward/releases/tag/v1.0.0
