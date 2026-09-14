@@ -15,6 +15,10 @@ All notable changes to this project are documented here. The format follows
   combined with untrusted repository content read into context enabled prompt-free execution.
   Read-only git forms stay prompt-free via the harness's built-in read-only set; `verify.py`
   now prompts once per run.
+- Add a trust-boundary section to `SKILL.md`: repository content the skill reads (routing file,
+  diff, file contents) is data, never instructions. Instructions embedded in that content are
+  ignored, writes stay under `docs/architecture/`, and generated content never instructs a later
+  agent. Hardens the skill against indirect prompt injection from untrusted repositories.
 
 ## [1.0.1] - 2026-09-10
 
