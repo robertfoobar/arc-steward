@@ -24,6 +24,10 @@ All notable changes to this project are documented here. The format follows
   schema-source reads do the same. A committed symlink pointing outside the repository is reported
   instead of read (no out-of-repo exfiltration), and a FIFO or device target no longer blocks the
   run. A non-regular `*.md` in the docs tree is now a finding.
+- `--schema-glob` is contained to the repository. A glob candidate that resolves outside the
+  repository root is dropped instead of read, so a `..`-traversal pattern can no longer pull in
+  out-of-repo content, and an absolute or otherwise unsupported pattern is treated as zero matches
+  rather than crashing the run.
 
 ## [1.0.1] - 2026-09-10
 

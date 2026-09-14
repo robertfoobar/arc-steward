@@ -54,7 +54,7 @@ def _er_entities(lines):
 def _schema_text(repo_root, schema_globs):
     chunks = []
     for pattern in schema_globs:
-        for candidate in sorted(repo_root.glob(pattern)):
+        for candidate in safeio.schema_files(repo_root, pattern):
             content = safeio.read_text(candidate)
             if content is not None:
                 chunks.append(content)
