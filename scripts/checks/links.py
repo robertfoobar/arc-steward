@@ -1,5 +1,6 @@
 import re
 
+from checks import safeio
 from checks.finding import Finding
 
 CHECK = "links"
@@ -38,9 +39,8 @@ def check_links(text, path, doc_path):
                 )
                 continue
             if anchor:
-                try:
-                    target_text = resolved.read_text(encoding="utf-8", errors="replace")
-                except OSError:
+                target_text = safeio.read_text(resolved)
+                if target_text is None:
                     findings.append(
                         Finding(path, number, CHECK, f"link target is not readable: {file_part}")
                     )

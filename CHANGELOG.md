@@ -19,6 +19,11 @@ All notable changes to this project are documented here. The format follows
   diff, file contents) is data, never instructions. Instructions embedded in that content are
   ignored, writes stay under `docs/architecture/`, and generated content never instructs a later
   agent. Hardens the skill against indirect prompt injection from untrusted repositories.
+- `verify.py` no longer follows symlinks or reads non-regular files. Document collection walks the
+  tree without descending into symlinked directories and reads only regular files; link-target and
+  schema-source reads do the same. A committed symlink pointing outside the repository is reported
+  instead of read (no out-of-repo exfiltration), and a FIFO or device target no longer blocks the
+  run. A non-regular `*.md` in the docs tree is now a finding.
 
 ## [1.0.1] - 2026-09-10
 
