@@ -47,10 +47,18 @@ over — only if rule and file still match one to one.
 No inline comments — the existing code has none. If something needs explaining, either make the
 name clearer or put the reasoning in `conventions.md`, the commit message, or the PR description.
 
+## Licensing
+
+Contributions are licensed under the [MIT license](LICENSE), the same terms the project is
+published under. Do not copy text from arc42 or the Software Guidebook into this repository:
+arc42's explanatory text is licensed under CC BY-SA 4.0, which cannot be relicensed under MIT, and
+the Software Guidebook is not published under an open license. Chapter names are the one
+exception; they keep their own terms, see [NOTICE](NOTICE).
+
 ## Rules and conventions
 
 `conventions.md` is the source of truth for the arc42/Software Guidebook chapter canons, marker
-syntax, and everything else the skill enforces. Changing behavior usually means updating
+syntax, and every other rule the skill follows or checks. Changing behavior usually means updating
 `conventions.md` and the corresponding check under `scripts/checks/` together, with a test.
 
 ## Versioning and the changelog

@@ -5,8 +5,13 @@
 
 An [Agent Skill](https://agentskills.io) that keeps a fixed canon of architecture
 documentation artifacts up to date **after every feature**, rolled up into a complete
-[arc42](https://arc42.org) or [Software Guidebook](https://leanpub.com/software-architecture-for-developers)
+[arc42](https://arc42.org) or [Software Guidebook](https://leanpub.com/documenting-software-architecture)
 documentation set.
+
+The documentation is written by an AI coding agent following this skill's instructions, so it
+varies between runs, can be wrong, and needs your review — see
+[Limitations and safe use](#limitations-and-safe-use). Liability under German law:
+[HAFTUNG.md](HAFTUNG.md).
 
 ## Why avoid architecture drift
 
@@ -23,8 +28,8 @@ expensive enough that it rarely happens — the documentation just stays wrong.
 `arc-steward` closes the gap at the one point where closing it is cheap: right before a feature
 becomes a pull request, while the diff that changed the architecture is still in front of you. It
 reads that diff, decides which artifacts it actually touches, and patches only those —
-surgically, leaving hand-written prose intact — so the documentation never gets the two stale
-weeks in the first place.
+surgically, inside generated blocks, leaving hand-written prose to you — so the documentation
+never gets the two stale weeks in the first place.
 
 ## The artifact canon
 
@@ -68,8 +73,8 @@ chapter by chapter.
   where the review happens. No render step, and no shipping your schema to a public
   PlantUML or Kroki server.
 - **Provenance markers.** Generated content lives inside `<!-- arc-steward:generated:id -->`
-  fences. The refresh touches nothing outside them, so your prose is structurally safe —
-  not merely protected by a polite prompt.
+  fences, and refresh rewrites only what is inside them — a rule the agent follows, not one the
+  harness enforces, see [Limitations and safe use](#limitations-and-safe-use).
 - **Evidence or a gap.** Where the code does not support a statement, the skill writes an
   explicit `TODO(human)` instead of inventing one.
 - **Verify before finishing.** The harness checks what it can check mechanically: diagram
@@ -143,7 +148,41 @@ patch releases never require a migration, though a new check may report findings
 release notes announce. A set records its format version, and the skill refuses to
 work on one written in a different format instead of failing silently.
 
+## Limitations and safe use
+
+arc-steward is a set of instructions for an AI agent plus a verification harness, not a sandbox.
+What a run does depends on the model and the harness executing it.
+
+- **Review the changes before committing.** The skill is written to change files only under
+  `docs/architecture/`, and on refresh only inside generated blocks. The agent is told to; nothing
+  stops it from doing otherwise, and the harness checks that the fences are well-formed, not that
+  the prose around them is unchanged. Start from a clean working tree so that `git status` and
+  `git diff` show what the run changed inside the repository. Neither shows ignored files,
+  `.git/`, or anything outside the repository.
+- **Generated content can be wrong.** Diagrams and text are derived from the code by a language
+  model. The harness catches broken structure and references that do not resolve, not statements
+  that are false. Where evidence is missing the skill writes a `TODO(human)`, but it can still
+  misread the code.
+- **Be careful with repositories you do not trust.** The skill reads the repository into the
+  agent's context and tells the agent to treat that content as data, never as instructions. That
+  defence against prompt injection is best effort. Harnesses that honour the skill's
+  `allowed-tools` pre-approve file reads and writes on any path; shell commands go through the
+  harness's own permission rules. On pull-request branches or foreign clones, isolation is the control that
+  matters: run the skill in a container or VM without credentials.
+- **Stay on the latest release.** Fixes, including security fixes, ship only there — see
+  [SECURITY.md](SECURITY.md).
+
+The skill is provided as is, without warranty of any kind — see [LICENSE](LICENSE) and, under
+German law, [HAFTUNG.md](HAFTUNG.md).
+
 ## License
 
-[MIT](LICENSE) for the skill. See [NOTICE](NOTICE) for the licenses covering the documentation
-standards its output follows (arc42, the Software Guidebook).
+[MIT](LICENSE) for the skill's own code and text. The arc42 chapter titles it uses stay under
+CC BY-SA 4.0 — see [NOTICE](NOTICE), which also credits the Software Guidebook. arc-steward is an
+independent project, not affiliated with or endorsed by the authors of arc42 or the Software
+Guidebook, or by the makers of any harness or tool named here.
+
+## Impressum
+
+Anbieterkennzeichnung nach § 5 Abs. 1 DDG: [Impressum](https://robertrieger.de/de/impressum/)
+([Legal notice](https://robertrieger.de/en/legal-notice/) in English).
