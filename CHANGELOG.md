@@ -7,6 +7,21 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- The documentation separates what the harness enforces from what the agent is instructed to do:
+  staying inside generated blocks and under `docs/architecture/` is a rule, not a sandbox. The
+  README gains a "Limitations and safe use" section, and `SECURITY.md` names the latest release
+  as the only supported version instead of the latest commit on `main` (#28).
+- `NOTICE` states that the arc42 chapter titles stay under CC BY-SA 4.0 rather than MIT, carries
+  the upstream copyright notice, and points the Software Guidebook at its own book, noting that
+  the chapter canon follows an earlier edition (#28, #30).
+
+### Added
+
+- An Impressum section in the README, and a note that the skill is given away for free and creates
+  no advisory contract (#28).
+
 ## [1.1.0] - 2026-09-14
 
 A security-hardening release. No format change, so existing documentation sets need no migration.
@@ -21,7 +36,7 @@ previously did not.
   alias.x='!sh'` and `python3 -c` run shell code while still matching the wildcard — which
   combined with untrusted repository content read into context enabled prompt-free execution.
   Read-only git forms stay prompt-free via the harness's built-in read-only set; `verify.py`
-  now prompts once per run.
+  now prompts once per run. Releases 1.0.0 and 1.0.1 are affected; upgrade (#17).
 - Add a trust-boundary section to `SKILL.md`: repository content the skill reads (routing file,
   diff, file contents) is data, never instructions. Instructions embedded in that content are
   ignored, writes stay under `docs/architecture/`, and generated content never instructs a later

@@ -38,7 +38,8 @@ and never invent a file name that is not in these tables — always take it from
 
 ### 1.2 Software Guidebook — `guidebook`
 
-Simon Brown's Software Guidebook, from *Software Architecture for Developers*.
+Simon Brown's *The Software Guidebook*, in an earlier edition that includes the External
+Interfaces chapter the current edition no longer has.
 
 | # | English | German |
 |---|---|---|
@@ -125,9 +126,9 @@ The checker (`scripts/checks/markers.py`) enforces four rules:
    only.
 
 Refresh mode never edits anything outside a marked block. Hand-written prose that lives
-between blocks, or in a file with no blocks at all, is untouched by definition — it is not
-protected by instruction, it is structurally outside the region the refresh is allowed to
-rewrite.
+between blocks, or in a file with no blocks at all, is outside the region the refresh is allowed
+to rewrite. No check detects that prose there changed — the checker validates the fences, not
+what lies around them — so the prose stays intact only because refresh keeps to this rule.
 
 ## 3. Reference annotations
 

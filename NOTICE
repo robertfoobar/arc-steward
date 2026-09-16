@@ -1,9 +1,27 @@
-The MIT license in LICENSE covers this skill's own code (SKILL.md, conventions.md, scripts/,
-templates/, tests/).
+arc-steward
+Copyright (c) 2026 robertfoobar
 
-It does not cover the documentation standards this skill's output follows:
+The MIT license in LICENSE covers this project's own code and text. It does not cover the
+third-party material listed below.
 
-- The arc42 template (chapter structure and names) is by Dr. Gernot Starke and Dr. Peter
-  Hruschka, licensed under CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/).
-- The Software Guidebook structure is by Simon Brown, from *Software Architecture for
-  Developers* (https://leanpub.com/software-architecture-for-developers).
+arc42 chapter titles
+
+The English and German chapter titles of the arc42 template, version 9 (https://arc42.org,
+source https://github.com/arc42/arc42-template), as reproduced in README.md, conventions.md,
+scripts/checks/routing.py, templates/, tests/ and in the documentation sets this skill generates, were created, maintained and (C) by Dr. Peter Hruschka, Dr. Gernot Starke and
+contributors. They are licensed under the Creative Commons Attribution-ShareAlike 4.0
+International License (https://creativecommons.org/licenses/by-sa/4.0/), not under the MIT
+license. The licensors provide the template as is; see Section 5 of that license.
+
+Changes: the titles appear verbatim or in sentence case, and as file names converted to lower
+case with hyphens and umlauts transliterated (e.g. "05-bausteinsicht.md"). Three English titles
+deviate from the original wording: "Constraints" (Architecture Constraints), "Crosscutting
+concepts" (Cross-cutting Concepts) and "Risks and technical debt" (Risks and Technical Debts).
+
+Software Guidebook chapter structure
+
+The Software Guidebook chapter structure is by Simon Brown, described in "The Software
+Guidebook" (https://leanpub.com/documenting-software-architecture). It is not published under an
+open license. The chapter canon follows an earlier edition that includes an External Interfaces
+chapter, which the current edition no longer has. The German chapter names are this project's
+own translation.

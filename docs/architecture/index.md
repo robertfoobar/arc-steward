@@ -1,7 +1,7 @@
 # arc-steward — Architecture Documentation
 
 This is the architecture documentation of arc-steward itself, following Simon Brown's
-[Software Guidebook](https://leanpub.com/software-architecture-for-developers), in English. It is
+[Software Guidebook](https://leanpub.com/documenting-software-architecture), in English. It is
 maintained by arc-steward: before each pull request, the refresh step that
 [`CONTRIBUTING.md`](../../CONTRIBUTING.md#before-opening-a-pr) asks for updates the generated
 blocks from the feature diff through [`arc-steward.routing.md`](arc-steward.routing.md). The directory and marker names are tool conventions, independent of the standard — see
