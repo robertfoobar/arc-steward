@@ -10,8 +10,7 @@ documentation set.
 
 The documentation is written by an AI coding agent following this skill's instructions, so it
 varies between runs, can be wrong, and needs your review — see
-[Limitations and safe use](#limitations-and-safe-use). Liability under German law:
-[HAFTUNG.md](HAFTUNG.md).
+[Limitations and safe use](#limitations-and-safe-use).
 
 ## Why avoid architecture drift
 
@@ -172,8 +171,10 @@ What a run does depends on the model and the harness executing it.
 - **Stay on the latest release.** Fixes, including security fixes, ship only there — see
   [SECURITY.md](SECURITY.md).
 
-The skill is provided as is, without warranty of any kind — see [LICENSE](LICENSE) and, under
-German law, [HAFTUNG.md](HAFTUNG.md).
+The skill is provided as is, without warranty of any kind — see [LICENSE](LICENSE). It is given
+away for free: nothing is charged for it, and no personal data is collected in return. Providing,
+downloading or using it creates no advisory, consulting or review contract; such a contract needs a
+separate written agreement.
 
 ## License
 

@@ -19,8 +19,8 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
-- `HAFTUNG.md`, the liability terms under German law, linked from the top of the README, and an
-  Impressum section in the README (#28).
+- An Impressum section in the README, and a note that the skill is given away for free and creates
+  no advisory contract (#28).
 
 ## [1.1.0] - 2026-09-14
 
