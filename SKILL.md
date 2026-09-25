@@ -99,11 +99,25 @@ marker syntax and one diagram convention per artifact.
    against — never guess a ref or silently diff against nothing.
 3. Map the changed paths through the routing table to the affected artifacts. If nothing maps,
    report that and stop — no change is a valid outcome, not a failure.
-4. For each affected artifact, edit only inside its `<!-- arc-steward:generated:id -->` block.
+4. Decide whether the change is architecturally significant. A no-op is the default outcome of
+   a refresh, not the exception: a mapped path alone is no reason to edit. Act only for changes
+   such as a new or changed interface, module or submodule; a component, service or container
+   added, removed or split, or responsibilities moved between them; a new external system or
+   runtime dependency; a changed deployment topology; a changed persisted data model; a new or
+   changed cross-cutting concept or a decision that warrants an ADR; a fundamental change to the
+   internal architecture. Stay passive for, among others, CI or other internal process changes
+   without an infrastructure change; refactorings without a structural change that would
+   invalidate the documentation; development tooling and local environment setup; test-only
+   changes — a test is evidence for a quality requirement, not one itself; bug fixes that change
+   neither interfaces nor structure; UI copy and styling; dependency updates without an API
+   change; configuration values and feature-flag defaults; performance work inside one
+   component. When in doubt, do nothing. A no-op run skips steps 5 to 7 and needs no
+   documentation commit; its report names the candidates that were deliberately skipped.
+5. For each affected artifact, edit only inside its `<!-- arc-steward:generated:id -->` block.
    Never touch a line outside a marked block.
-5. If the set has a glossary chapter, any new domain entity gets an entry there.
-6. Run the verification command below. Fix findings.
-7. Report what changed, and what was deliberately left alone and why.
+6. If the set has a glossary chapter, any new domain entity gets an entry there.
+7. Run the verification command below. Fix findings.
+8. Report what changed, and what was deliberately left alone and why.
 
 ## Verification
 
