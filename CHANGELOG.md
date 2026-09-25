@@ -9,6 +9,12 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- Refresh treats a no-op as its default outcome. After mapping the diff it checks whether the
+  change is architecturally significant — interfaces, modules, components, runtime dependencies,
+  deployment topology, persisted data model, cross-cutting concepts — and stays passive for CI and
+  other process changes, refactorings without structural impact, development tooling, tests, bug
+  fixes, UI copy, dependency updates and configuration values. Skipped candidates are named in the
+  report (#33).
 - The documentation separates what the harness enforces from what the agent is instructed to do:
   staying inside generated blocks and under `docs/architecture/` is a rule, not a sandbox. The
   README gains a "Limitations and safe use" section, and `SECURITY.md` names the latest release

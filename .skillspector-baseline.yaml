@@ -41,7 +41,7 @@ fingerprints:
   reason: >-
     Same installation-table cell as the AS3 finding above: a user-run symlink command in the
     README, not agent-established runtime persistence.
-- hash: sha256:3891583ce95cdda1c88b2f1be9be9448c25130ca0d7251a58cdfb213cd0da052
+- hash: sha256:e69c914d79b8727eee8088d0d36f3264d8433ffee3cc764f6b1c0c545c845aaa
   rule_id: RA2
   file: SKILL.md
   reason: >-
